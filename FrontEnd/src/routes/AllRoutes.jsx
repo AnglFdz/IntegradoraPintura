@@ -23,8 +23,10 @@ function AllRoutes() {
             <Routes>
                 {validSessionExist ? (
                     <>
-                        <Route path='/catalogue' element={<CataloguePage />} />
+                        <Route path='/cataloge' element={<CataloguePage />} />
                         <Route path='/employee' element={<CatalogueEmployeePage />} />
+                <Route path='/home' element={<Homepage/>}/>
+                <Route path='/catalogue' element={<Catalogue/>} />
                     </>
                 ) : (
                     <>

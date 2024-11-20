@@ -1,42 +1,28 @@
-import React from 'react';
-import { Tag } from 'primereact/tag';
-import { Button } from 'primereact/button';
-import Image from "../../assets/prueba.png";
+import React from "react";
+import { Card } from "primereact/card";
+import { Button } from "primereact/button";
 
-function Card({ product }) {
-  const getSeverity = (product) => {
-    switch (product.inventoryStatus) {
-      case 'INSTOCK':
-        return 'success';
-      case 'LOWSTOCK':
-        return 'warning';
-      case 'OUTOFSTOCK':
-        return 'danger';
-      default:
-        return null;
-    }
-  };
+function CardPrime({ title, description, image,stock,onAction }) {
+  const header = <img alt={title} src={image} style={{ width: "100%" }} />;
+  const footer = (
+    <span>
+      <Button label="Action" icon="pi pi-cart-plus" onClick={onAction} disabled={stock == 0} />
+    </span>
+  );
 
   return (
-    <div className="col-12 sm:col-6 lg:col-12 xl:col-3 p-2" key={product.id}>
-      <div className="p-4 border-1 surface-border surface-card border-round">
-        <div className="flex flex-wrap align-items-center justify-content-between gap-2">
-          <div className="flex align-items-center gap-2">
-            <i className="pi pi-tag"></i>
-            <span className="font-semibold">{product.category}</span>
-          </div>
-        </div>
-        <div className="flex flex-column align-items-center gap-3 py-5">
-          <img className="w-9 shadow-2 border-round" src={Image} alt={product.name} />
-          <div className="text-2xl font-bold">{product.name} ${product.price}</div>
-        </div>
-        <div className="flex align-items-center justify-content-between">
-          <Tag value={product.inventoryStatus} severity={getSeverity(product)}></Tag>
-          <Button icon="pi pi-shopping-cart" className="p-button-rounded" disabled={product.inventoryStatus === 'OUTOFSTOCK'}></Button>
-        </div>
-      </div>
-    </div>
+    <Card style={{backgroundColor:'var(--bluegray-50)',borderRadius:'10px'}}
+      title={title}
+      subTitle={description}
+      header={header}
+      stock = {stock}
+      footer={footer}
+      className="md:w-30rem" // Clase de PrimeFlex para margen inferior
+    > 
+      <p>stock: {stock}</p>
+      <p className="m-0">This is a dynamic card using PrimeReact.</p>
+    </Card>
   );
 }
 
-export default Card;
+export default CardPrime;
