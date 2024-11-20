@@ -16,6 +16,10 @@ function Register() {
                     <span className={`${styleDivision}`}>Introduzca su nombre:</span>
                     <InputText placeholder="Nombre" />
                     <span className={`${styleDivision}`}>Introduzca su correo electronico:</span>
+                    <InputText placeholder="Nombre" />
+                    <span className={`${styleDivision}`}>Introduzca su correo electronico:</span>
+                    <InputText placeholder="Nombre" />
+                    <span className={`${styleDivision}`}>Introduzca su correo electronico:</span>
                     <InputText placeholder="Correo" />
                     <span className={`${styleDivision}`}>Introduce una contraseña:</span>
                     <Password placeholder="Contraseña" toggleMask/>
