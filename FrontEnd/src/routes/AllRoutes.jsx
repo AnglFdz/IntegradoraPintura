@@ -1,11 +1,13 @@
 import React from 'react'
-import { Route, Routes, useNavigate } from 'react-router-dom'
+import { Route, Router, Routes, useNavigate } from 'react-router-dom'
 import NavBar from '../global-components/NavBar'
 import Login from '../access-control/components/Login'
 import RecoveryPassword from '../access-control/components/RecoveryPassword'
 import Register from '../access-control/components/Register'
 import CataloguePage from '../Catalogue-client/pages/CataloguePage'
 import CatalogueEmployeePage from '../employee/pages/CatalogueEmployeePage'
+import Homepage from '../Catalogue-client/homepage'
+import Catalogue from '../Catalogue-client/catalogue'
 
 function AllRoutes() {
     const validSessionExist = localStorage.getItem('session');
@@ -33,11 +35,11 @@ function AllRoutes() {
                         <Route path='/' element={<Login reload={Reload} />} />
                         <Route path='/recovery' element={<RecoveryPassword />} />
                         <Route path='/register' element={<Register />} />
-                    </>
+                        <Route path='/store' element={<Homepage/>} />
+                        <Route path='/store/items' element={<Catalogue/>}/>                   </>
                 )}
             </Routes>
         </>
     );
 }
-
 export default AllRoutes;
