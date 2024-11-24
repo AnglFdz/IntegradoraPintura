@@ -9,26 +9,30 @@ import java.util.Collection;
 import java.util.Collections;
 
 public class UserDetailsImpl implements UserDetails {
+
     private String username;
     private String password;
-    private boolean blocked;
-    private boolean enabled;
+    private boolean isBlocked;
+    private boolean isEnabled;
     private Collection<? extends GrantedAuthority> authorities;
 
-    public UserDetailsImpl(String username, String password, boolean blocked, boolean enabled, Collection<? extends GrantedAuthority> authorities) {
+    public UserDetailsImpl(String username, String password, boolean isBlocked, boolean isEnabled, Collection<? extends GrantedAuthority> authorities) {
         this.username = username;
         this.password = password;
-        this.blocked = blocked;
-        this.enabled = enabled;
+        this.isBlocked = isBlocked;
+        this.isEnabled = isEnabled;
         this.authorities = authorities;
     }
 
     public static UserDetailsImpl build(UsuarioBean user) {
+        if (user.getRole() == null || user.getRole().getNombre() == null) {
+            throw new IllegalArgumentException("El usuario no tiene un rol asignado.");
+        }
         GrantedAuthority authority = new SimpleGrantedAuthority(user.getRole().getNombre());
         return new UserDetailsImpl(
                 user.getEmail(),
                 user.getContrasena(),
-                !user.getBlocked(),
+                user.getBlocked(), // Inversión lógica se maneja directamente aquí
                 user.getStatus(),
                 Collections.singleton(authority)
         );
@@ -56,7 +60,7 @@ public class UserDetailsImpl implements UserDetails {
 
     @Override
     public boolean isAccountNonLocked() {
-        return !blocked;
+        return !isBlocked; // Refleja si la cuenta está bloqueada
     }
 
     @Override
@@ -66,6 +70,6 @@ public class UserDetailsImpl implements UserDetails {
 
     @Override
     public boolean isEnabled() {
-        return enabled;
+        return isEnabled;
     }
 }

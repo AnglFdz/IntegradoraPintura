@@ -1,16 +1,15 @@
 package utez.edu.mx.IntPinturaAPI.config;
 
 import lombok.RequiredArgsConstructor;
-import org.springframework.beans.factory.annotation.Autowired;
-import utez.edu.mx.IntPinturaAPI.models.entity.RoleBean;
-import utez.edu.mx.IntPinturaAPI.models.entity.UsuarioBean;
-import utez.edu.mx.IntPinturaAPI.models.dao.UsuarioDao;
-import utez.edu.mx.IntPinturaAPI.models.dao.RoleDao;
 import org.springframework.boot.CommandLineRunner;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.core.annotation.Order;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.transaction.annotation.Transactional;
+import utez.edu.mx.IntPinturaAPI.models.dao.RoleDao;
+import utez.edu.mx.IntPinturaAPI.models.dao.UsuarioDao;
+import utez.edu.mx.IntPinturaAPI.models.entity.RoleBean;
+import utez.edu.mx.IntPinturaAPI.models.entity.UsuarioBean;
 
 import java.util.Optional;
 
@@ -26,38 +25,38 @@ public class InitialConfig implements CommandLineRunner {
     @Override
     @Transactional
     public void run(String... args) {
-
+        // Crear o buscar roles
         RoleBean adminRole = getOrSaveRol(new RoleBean(null, "ADMIN_ROLE", null));
         RoleBean employeeRole = getOrSaveRol(new RoleBean(null, "EMPLOYEE_ROLE", null));
         RoleBean userRole = getOrSaveRol(new RoleBean(null, "USER_ROLE", null));
 
-        UsuarioBean admin = getOrSaveUser(
-                new UsuarioBean(
-                        null,  "Administrador", // nombre
-                        "ApellidoPaterno", // ap1
-                        "ApellidoMaterno", // ap2
-                        "admin@example.com", // email
-                        encoder.encode("admin"), // contrasena
-                        true, // status
-                        false, // blocked
-                        adminRole, // role
-                        null, // ventas
-                        null // pedidos
-                )
-                );
-
+        // Crear o buscar usuario administrador
+        getOrSaveUser(new UsuarioBean(
+                null,
+                "Administrador",
+                "ApellidoPaterno",
+                "ApellidoMaterno",
+                "admin@example.com",
+                encoder.encode("admin"),
+                true,
+                false,
+                adminRole, // Relación directa con rol
+                null,
+                null
+        ));
     }
 
+    // Método genérico para obtener o guardar un rol
     @Transactional
     public RoleBean getOrSaveRol(RoleBean role) {
-        Optional<RoleBean> foundRole = roleRepository.findByNombre(role.getNombre());
-        return foundRole.orElseGet(() -> roleRepository.saveAndFlush(role));
+        return roleRepository.findByNombre(role.getNombre())
+                .orElseGet(() -> roleRepository.saveAndFlush(role));
     }
 
+    // Método genérico para obtener o guardar un usuario
     @Transactional
     public UsuarioBean getOrSaveUser(UsuarioBean usuario) {
-        Optional<UsuarioBean> foundUser = usuarioRepository.findByEmail(usuario.getEmail());
-        return foundUser.orElseGet(() -> usuarioRepository.saveAndFlush(usuario));
+        return usuarioRepository.findByEmail(usuario.getEmail())
+                .orElseGet(() -> usuarioRepository.saveAndFlush(usuario));
     }
 }
-

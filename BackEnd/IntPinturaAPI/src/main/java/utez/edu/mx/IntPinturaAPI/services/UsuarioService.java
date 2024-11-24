@@ -59,7 +59,7 @@ public class UsuarioService {
         usuario.setContrasena(usuarioDto.getContrasena());
 
         // Asignar rol al usuario
-        if (usuarioDto.getRole().getNombre() != null) {
+        if (usuarioDto.getRole() != null && usuarioDto.getRole().getNombre() != null) {
             Optional<RoleBean> role = roleDao.findByNombre(usuarioDto.getRole().getNombre());
             role.ifPresent(usuario::setRole);
         }

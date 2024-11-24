@@ -60,7 +60,7 @@ public class AuthService {
 
             UsuarioDto usuarioDto = new UsuarioDto(user);
 
-            SignedDto signedDto = new SignedDto(token, "Bearer", usuarioDto, usuarioDto.getRole());
+            SignedDto signedDto = new SignedDto(token, "Bearer", usuarioDto, null);
             return new ResponseEntity<>(
                     new ApiResponse(signedDto, HttpStatus.OK),
                     HttpStatus.OK);

@@ -13,11 +13,4 @@ public interface UsuarioDao extends JpaRepository<UsuarioBean, Integer> {
 
     // Buscar usuario por email
     Optional<UsuarioBean> findByEmail(String email);
-    @Modifying
-    @Query(value = "INSERT INTO usuario_roles(usuario_id, rol_id) VALUES (:usuarioId, :rolId)", nativeQuery = true)
-    int saveUsuarioRol(@Param("usuarioId") Integer usuarioId, @Param("rolId") Integer rolId);
-
-    @Query(value = "SELECT usuario_id FROM usuario_roles WHERE usuario_id = :usuarioId AND rol_id = :rolId", nativeQuery = true)
-    Integer getIdUsuarioRoles(@Param("usuarioId") Integer usuarioId, @Param("rolId") Integer rolId);
-
 }
