@@ -1,5 +1,4 @@
 import React from "react";
-import { Menubar } from "primereact/menubar";
 import { Button } from "primereact/button";
 import  CardPrime  from "./components/Card";
 import "primeicons/primeicons.css";
@@ -132,8 +131,6 @@ const Catalogue = () => {
 
   return (
     <div>
-      {/* Menu */}
-      <Menubar model={items} end={endElement} className="my-2" style={{backgroundColor:'var(--primary-300)',color:'var(--primary-color-text)',items:'var(--surface-0)'}} />
       {/* Cards */}
       <div className="grid">
         {cardData.map((card) => (

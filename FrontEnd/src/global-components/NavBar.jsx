@@ -76,7 +76,7 @@ function NavBar({session}) {
     };
     return (
         <>
-            <Menubar model={items} className="my-2" />
+            <Menubar model={items} className="my-2" style={{background: 'var(--surface-300)', color:'var(--primary-color-text)',items:'var(--surface-0)'}} />
         </>
     )
 }
