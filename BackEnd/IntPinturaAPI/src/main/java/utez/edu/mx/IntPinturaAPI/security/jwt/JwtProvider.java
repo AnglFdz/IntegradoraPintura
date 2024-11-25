@@ -14,73 +14,81 @@ import java.util.Date;
 
 @Service
 public class JwtProvider {
+
     @Value("${jwt.secret}")
     private String secret;
+
     @Value("${jwt.expiration}")
     private long expiration;
-    private final String TOKEN_HEADER = "Authorization";
-    private final String TOKEN_TYPE = "Bearer ";
 
+    private static final String TOKEN_HEADER = "Authorization";
+    private static final String TOKEN_TYPE = "Bearer ";
+
+    // Generar un token JWT
     public String generateToken(Authentication auth) {
         UserDetails user = (UserDetails) auth.getPrincipal();
         Claims claims = Jwts.claims().setSubject(user.getUsername());
         claims.put("roles", user.getAuthorities());
+
         Date tokenCreateTime = new Date();
-        Date tokenValidity = new Date(
-                tokenCreateTime.getTime() + expiration * 1000
-        );
+        Date tokenValidity = new Date(tokenCreateTime.getTime() + expiration * 1000);
+
         return Jwts.builder()
                 .setClaims(claims)
                 .setSubject(user.getUsername())
-                .setIssuedAt(new Date())
+                .setIssuedAt(tokenCreateTime)
                 .setExpiration(tokenValidity)
                 .signWith(getSignKey(), SignatureAlgorithm.HS256)
                 .compact();
     }
+
+    // Obtener la clave para firmar los tokens
     private Key getSignKey() {
         byte[] keyBytes = Decoders.BASE64.decode(secret);
         return Keys.hmacShaKeyFor(keyBytes);
     }
 
-    private Claims parseJwtClaims(String token) {
-        return Jwts.parserBuilder()
-                .setSigningKey(getSignKey())
-                .build()
-                .parseClaimsJws(token)
-                .getBody();
-    }
-
-    public Claims resolveClaims(HttpServletRequest req) {
-        try {
-            String token = resolveToken(req);
-            if (token != null)
-                return parseJwtClaims(token);
-            return null;
-        } catch (ExpiredJwtException e) {
-            throw e;
-        } catch (Exception e) {
-            throw e;
-        }
-    }
-
+    // Resolver el token desde la solicitud HTTP
     public String resolveToken(HttpServletRequest req) {
         String bearerToken = req.getHeader(TOKEN_HEADER);
-        if (bearerToken != null && bearerToken.startsWith(TOKEN_TYPE))
-            return bearerToken.replace(TOKEN_TYPE, "");
-        // bearerToken.substring(TOKEN_TYPE.length());
+        if (bearerToken != null && bearerToken.startsWith(TOKEN_TYPE)) {
+            return bearerToken.substring(TOKEN_TYPE.length());
+        }
         return null;
     }
 
-
-    public boolean validateClaims(Claims claims, String token){
-        try{
-            parseJwtClaims(token);
-            return claims.getExpiration().after(new Date());
-        }catch (MalformedJwtException | UnsupportedJwtException | ExpiredJwtException e){
-            e.printStackTrace();
-        } catch (Exception e){
-            e.printStackTrace();
+    // Validar un token JWT
+    public boolean validateToken(String token) {
+        try {
+            Jwts.parserBuilder()
+                    .setSigningKey(getSignKey())
+                    .build()
+                    .parseClaimsJws(token);
+            return true;
+        } catch (ExpiredJwtException e) {
+            System.out.println("Token expirado: " + e.getMessage());
+        } catch (UnsupportedJwtException e) {
+            System.out.println("Token no soportado: " + e.getMessage());
+        } catch (MalformedJwtException e) {
+            System.out.println("Token malformado: " + e.getMessage());
+        } catch (SignatureException e) {
+            System.out.println("Fallo en la firma del token: " + e.getMessage());
+        } catch (IllegalArgumentException e) {
+            System.out.println("Token vacío o nulo: " + e.getMessage());
         }
         return false;
+    }
+
+    // Extraer claims del token
+    public Claims getClaims(String token) {
+        try {
+            return Jwts.parserBuilder()
+                    .setSigningKey(getSignKey())
+                    .build()
+                    .parseClaimsJws(token)
+                    .getBody();
+        } catch (JwtException e) {
+            throw new RuntimeException("Error al obtener los claims del token: " + e.getMessage());
+        }
     }
 }

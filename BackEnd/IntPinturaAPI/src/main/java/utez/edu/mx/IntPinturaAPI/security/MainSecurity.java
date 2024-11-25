@@ -1,6 +1,5 @@
 package utez.edu.mx.IntPinturaAPI.security;
 
-
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.security.authentication.AuthenticationManager;
@@ -27,9 +26,10 @@ import java.util.List;
 @EnableWebSecurity
 @EnableMethodSecurity
 public class MainSecurity {
-    private final String[] WHITE_LIST = {
+    private static final String[] WHITE_LIST = {
             "/api/auth/**",
     };
+
     private final UserDetailsServiceImpl service;
 
     public MainSecurity(UserDetailsServiceImpl service) {
@@ -50,14 +50,12 @@ public class MainSecurity {
     }
 
     @Bean
-    public AuthenticationManager authenticationManager(
-            AuthenticationConfiguration configuration
-    ) throws Exception {
+    public AuthenticationManager authenticationManager(AuthenticationConfiguration configuration) throws Exception {
         return configuration.getAuthenticationManager();
     }
 
     @Bean
-    public JwtAuthenticationFilter filter() {
+    public JwtAuthenticationFilter jwtAuthenticationFilter() {
         return new JwtAuthenticationFilter();
     }
 
@@ -65,29 +63,26 @@ public class MainSecurity {
     public SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception {
         http.cors(cors -> cors.configurationSource(request -> {
                     var corsConfig = new org.springframework.web.cors.CorsConfiguration();
-                    corsConfig.setAllowedOrigins(List.of(
-                            "http://localhost:517"
-                    ));
-                    corsConfig.setAllowedMethods(List.of("GET", "POST", "PUT", "DELETE","PATCH", "OPTIONS"));
+                    corsConfig.setAllowedOrigins(List.of("http://localhost"));
+                    corsConfig.setAllowedMethods(List.of("GET", "POST", "PUT", "DELETE", "PATCH", "OPTIONS"));
                     corsConfig.setAllowedHeaders(List.of("*"));
                     corsConfig.setAllowCredentials(true);
                     corsConfig.addExposedHeader("Authorization");
                     return corsConfig.applyPermitDefaultValues();
                 }))
                 .csrf(AbstractHttpConfigurer::disable)
-                .authorizeHttpRequests(req ->
-                        req.requestMatchers(WHITE_LIST).permitAll()
-                                .requestMatchers("/api/pedidos/**", "/api/ventas/**", "/api/usuarios/**", "/api/roles/**").hasAuthority("ADMIN_ROLE")
-                                .requestMatchers("/api/productos/**").hasAnyAuthority("ADMIN_ROLE", "EMPLOYEE_ROLE", "USER_ROLE")
-                                .anyRequest().authenticated()
+                .authorizeHttpRequests(req -> req
+                        .requestMatchers(WHITE_LIST).permitAll()
+                        .requestMatchers("/api/pedidos/**", "/api/ventas/**", "/api/usuarios/**", "/api/roles/**").hasAuthority("ADMIN_ROLE")
+                        .requestMatchers("/api/productos/**").hasAnyAuthority("ADMIN_ROLE", "EMPLOYEE_ROLE", "USER_ROLE")
+                        .anyRequest().authenticated()
                 )
                 .httpBasic(Customizer.withDefaults())
                 .headers(header -> header.frameOptions(HeadersConfigurer.FrameOptionsConfig::sameOrigin))
                 .sessionManagement(session -> session.sessionCreationPolicy(SessionCreationPolicy.STATELESS))
                 .authenticationProvider(authenticationProvider())
-                .addFilterBefore(filter(), UsernamePasswordAuthenticationFilter.class)
+                .addFilterBefore(jwtAuthenticationFilter(), UsernamePasswordAuthenticationFilter.class)
                 .logout(out -> out.logoutUrl("/api/auth/logout").clearAuthentication(true));
         return http.build();
     }
-
 }

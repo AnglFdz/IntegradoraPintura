@@ -19,8 +19,6 @@ public class AuthController {
 
     @PostMapping("/signin")
     public ResponseEntity<ApiResponse> signIn(@RequestBody SignDto dto) {
-            System.out.println("Usuario: " + dto.getUsuario());
-            System.out.println("Contraseña: " + dto.getContrasenia());
         return service.signIn(dto.getUsuario(), dto.getContrasenia());
     }
 }
