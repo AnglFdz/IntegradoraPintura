@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import { DataTable } from 'primereact/datatable';
 import { Column } from 'primereact/column';
+import ModalItems from './ModalItems';
 
 function ItemsList(props) {
     const { page } = props;
@@ -341,9 +342,9 @@ function ItemsList(props) {
                      <button className='mr-3'>Agregar</button>
                      </div> 
                      : pageLoad === 'employee/items' || pageLoad === 'admin' ?
-                        <div>
-                        <button className='mr-3'>Hola</button>
-                        <button className='mr-3'>Hola</button>
+                        <div className='grid'>
+                        <ModalItems />
+                        <button className='ml-3'>Hola</button>
                         </div> : null
                         }
             </>

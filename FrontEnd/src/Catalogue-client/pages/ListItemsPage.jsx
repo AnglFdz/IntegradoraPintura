@@ -1,5 +1,6 @@
 import React from 'react'
 import ItemsList from '../../employee/components/ItemsList';
+import ModalItems from '../../employee/components/ModalItems';
 import { Button } from 'primereact/button';
 import { InputText } from 'primereact/inputtext';
 
@@ -13,7 +14,7 @@ function ListItemsPage() {
                     </span>
                     <InputText placeholder="Buscar producto" />
                 </div>
-                <Button label="Añadir productos" className=" p-button-rounded p-button-text bg-blue-600 text-50" />
+                <ModalItems text='Añadir producto' />
             </div>
             <ItemsList page='employee/items' />
         </>
