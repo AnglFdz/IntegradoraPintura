@@ -8,6 +8,7 @@ import CataloguePage from '../Catalogue-client/pages/CataloguePage'
 import CatalogueEmployeePage from '../employee/pages/CatalogueEmployeePage'
 import Homepage from '../Catalogue-client/homepage'
 import Catalogue from '../Catalogue-client/catalogue'
+import ListItemsPage from '../Catalogue-client/pages/ListItemsPage'
 
 function AllRoutes() {
     const validSessionExist = localStorage.getItem('session');
@@ -16,7 +17,7 @@ function AllRoutes() {
     const navigate = useNavigate();
 
     const Reload = () => {
-        setReload(!reload); 
+        setReload(!reload);
     };
 
     return (
@@ -27,16 +28,18 @@ function AllRoutes() {
                     <>
                         <Route path='/cataloge' element={<CataloguePage />} />
                         <Route path='/employee' element={<CatalogueEmployeePage />} />
-                <Route path='/home' element={<Homepage/>}/>
-                <Route path='/catalogue' element={<Catalogue/>} />
+                        <Route path='/employee/items' element={<ListItemsPage/>}/>
+                        <Route path='/home' element={<Homepage />} />
+                        <Route path='/catalogue' element={<Catalogue />} />
                     </>
                 ) : (
                     <>
                         <Route path='/' element={<Login reload={Reload} />} />
                         <Route path='/recovery' element={<RecoveryPassword />} />
                         <Route path='/register' element={<Register />} />
-                        <Route path='/store' element={<Homepage/>} />
-                        <Route path='/store/items' element={<Catalogue/>}/>                   </>
+                        <Route path='/store' element={<Homepage />} />
+                        <Route path='/store/items' element={<Catalogue />} />
+                    </>
                 )}
             </Routes>
         </>
