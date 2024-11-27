@@ -9,6 +9,7 @@ import CatalogueEmployeePage from '../employee/pages/CatalogueEmployeePage'
 import Homepage from '../Catalogue-client/homepage'
 import Catalogue from '../Catalogue-client/catalogue'
 import ListItemsPage from '../Catalogue-client/pages/ListItemsPage'
+import Orderpage from '../Catalogue-client/orderPage'
 
 function AllRoutes() {
     const validSessionExist = localStorage.getItem('session');
@@ -37,8 +38,9 @@ function AllRoutes() {
                         <Route path='/' element={<Login reload={Reload} />} />
                         <Route path='/recovery' element={<RecoveryPassword />} />
                         <Route path='/register' element={<Register />} />
-                        <Route path='/store' element={<Homepage />} />
-                        <Route path='/store/items' element={<Catalogue />} />
+                        <Route path='/store' element={<Homepage/>} />
+                        <Route path='/store/items' element={<Catalogue/>}/>                   
+                        <Route path='/store/order' element={<Orderpage />}/>
                     </>
                 )}
             </Routes>
