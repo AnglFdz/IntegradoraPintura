@@ -10,11 +10,12 @@ function ModalItems(props){
     const {text} = props;
     const [visible, setVisible] = useState(false);
     const [showText, setShowText] = useState(text);
+    const styleInputsTexts = 'w-full'
 
     return (
         <div className="">
             {showText === null || showText === undefined || showText === '' ?
-            <Button icon="pi pi-external-link" className="bg-yellow-500"  onClick={() => setVisible(true)} /> :
+            <Button icon="pi pi-pencil" className="p-button p-button-warning"  onClick={() => setVisible(true)} /> :
             <Button label={`${showText}`} onClick={() => setVisible(true)} />
             }
             <Dialog header={showText ? "Añadir producto":"Editar Producto"} visible={visible} style={{ width: '50vw' }} onHide={() => {if (!visible) return; setVisible(false); }}>
@@ -24,15 +25,15 @@ function ModalItems(props){
                     </div>
                     <div className="col-6">
                         <h3>Nombre</h3>
-                        <InputText placeholder='Ingrese el precio del producto' onChange={(e) => setShowText(e.target.value)} />
+                        <InputText placeholder='Ingrese el precio del producto' className={styleInputsTexts} onChange={(e) => {}} />
                         <h3>Descripción</h3>
-                        <InputTextarea placeholder='Ingrese la descripción del producto' onChange={(e) => setShowText(e.target.value)} />
+                        <InputTextarea placeholder='Ingrese la descripción del producto' className={styleInputsTexts} onChange={(e) => {}} />
                     </div>
                     <div className="col-6">
                         <h3>Precio</h3>
-                        <InputText placeholder='Ingrese el precio del producto' onChange={(e) => setShowText(e.target.value)} />
+                        <InputText keyfilter={"num"} placeholder='Ingrese el precio del producto' className={styleInputsTexts} onChange={(e) => {}} />
                         <h3>Stock</h3>
-                        <InputText placeholder='Ingrese el stock del producto' onChange={(e) => setShowText(e.target.value)} />
+                        <InputText keyfilter={"num"} placeholder='Ingrese el stock del producto' className={styleInputsTexts} onChange={(e) => {}} />
                     </div>
                     <div className="grid flex justify-content-end w-full">
                         <Button label="Cancelar" className="p-button-danger" onClick={() => setVisible(false)} />

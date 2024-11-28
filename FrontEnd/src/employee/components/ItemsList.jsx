@@ -1,4 +1,5 @@
 import React, { useState, useEffect } from 'react';
+import { Button } from 'primereact/button';
 import { DataTable } from 'primereact/datatable';
 import { Column } from 'primereact/column';
 import ModalItems from './ModalItems';
@@ -344,7 +345,10 @@ function ItemsList(props) {
                      : pageLoad === 'employee/items' || pageLoad === 'admin' ?
                         <div className='grid'>
                         <ModalItems />
-                        <button className='ml-3'>Hola</button>
+                <Button
+                    icon="pi pi-trash"
+                    className="p-button p-button-danger ml-3"
+                    onClick={() => deleteProduct(rowData)} />
                         </div> : null
                         }
             </>
