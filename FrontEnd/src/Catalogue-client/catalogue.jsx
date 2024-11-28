@@ -1,4 +1,5 @@
-import React from "react";
+import React,{useState} from "react";
+import { Menubar } from "primereact/menubar";
 import { Button } from "primereact/button";
 import  CardPrime  from "./components/Card";
 import "primeicons/primeicons.css";
@@ -69,7 +70,6 @@ const Catalogue = () => {
       },
     },
   ];
-
   const cardData = [
     {
       id: 1,
@@ -139,7 +139,9 @@ const Catalogue = () => {
   
   return (
     <div>
-      {/* Cards */}
+      {/* Menu */}
+      <Menubar model={items} end={endElement} className="my-2" style={{backgroundColor:'var(--primary-300)',color:'var(--primary-color-text)',items:'var(--surface-0)'}} />
+      {/* Cards */}   
       <div className="grid">
         {cardData.map((card) => (
           <div key={card.id} className="col-12 flex align-items-center justify-content-center md:col-6 lg:col-3 ">
