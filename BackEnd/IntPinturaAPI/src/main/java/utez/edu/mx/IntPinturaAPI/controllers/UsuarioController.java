@@ -69,6 +69,24 @@ public class UsuarioController {
         return new ResponseEntity<>(response, response.getStatus());
     }
 
+    @PostMapping("/crear/{roleName}")
+    public ResponseEntity<ApiResponse> createUsuarioByRole(
+            @RequestBody UsuarioDto usuarioDto,
+            @PathVariable String roleName
+    ) {
+        ApiResponse response;
+        try {
+            UsuarioDto createdUsuario = usuarioService.createUsuarioByRole(usuarioDto, roleName);
+            response = new ApiResponse(createdUsuario, HttpStatus.CREATED);
+        } catch (IllegalArgumentException e) {
+            response = new ApiResponse(HttpStatus.BAD_REQUEST, true, e.getMessage());
+        } catch (Exception e) {
+            response = new ApiResponse(HttpStatus.INTERNAL_SERVER_ERROR, true, "Error al crear el usuario");
+        }
+        return new ResponseEntity<>(response, response.getStatus());
+    }
+
+
     // Actualizar un usuario existente
     @PutMapping("/{id}")
     public ResponseEntity<ApiResponse> updateUsuario(@PathVariable Integer id, @RequestBody UsuarioDto usuarioDto) {
