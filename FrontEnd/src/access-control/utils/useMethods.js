@@ -1,8 +1,15 @@
 import Swal from 'sweetalert2';
+import * as Connection from './use_connection'
+import CryptoJS from 'crypto-js';
 
 /* Alertas */
-const successMessage = []
-const errorMessage = []
+const successMessage = ["Inicio de sesión correcto"];
+const errorMessage = ["Usuario o contraseña incorrectos"];
+
+export const getToken = () =>{
+    const session = JSON.parse(localStorage.getItem('session'));
+    return session.token;
+}
 
 export const sendMessage = (messaje, type) => {
     switch (type) {
@@ -16,7 +23,7 @@ export const sendMessage = (messaje, type) => {
                 timer: 1500
             });
             break;
-        case 'succes':
+        case 200:
             Swal.fire({
                 title: 'Correcto',
                 icon: 'success',
@@ -30,7 +37,7 @@ export const sendMessage = (messaje, type) => {
             Swal.fire({
                 title: 'Error',
                 icon: 'error',
-                text: messaje,
+                text: errorMessage[messaje],
                 showConfirmButton: false,
                 allowOutsideClick: false,
                 timer: 1500
@@ -57,8 +64,32 @@ export const validMail = (email) => {
     }
 }
 
-export const loginMethod = async ({ data, reload, navigate }) => {
-    localStorage.setItem('session', JSON.stringify({ user: data.mail, rol: 1 }));
+export const loginMethod = ({ newData, reload, navigate }) => {
+    const userInfo = {
+        name: newData.user.nombre, 
+        ap1: newData.user.ap1,
+        ap2: newData.user.ap2,
+        user: newData.user.email,
+        token: newData.token,
+        role: newData.user.role.id_role
+    }
+    const saveUser = CryptoJS.AES.encrypt(JSON.stringify(userInfo), 'pintura').toString();
+    localStorage.setItem('session', JSON.stringify({ user: saveUser}));
     navigate('/catalogue');
+    setTimeout(() => {
+        console.clear();
+    }, 1000);
     reload();
+}
+
+export const login = async ({data, reload, navigate}) => {
+    const response = await Connection.sendLogin(data);
+    const newData = response.data.data;
+    if (response.status === 200) {
+        loginMethod({ newData, reload, navigate });
+        sendMessage(200, 0)
+    } else {
+        sendMessage(0, 'error');
+    }
+    
 }

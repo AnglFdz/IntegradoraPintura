@@ -348,7 +348,7 @@ function ItemsList(props) {
                 <Button
                     icon="pi pi-trash"
                     className="p-button p-button-danger ml-3"
-                    onClick={() => deleteProduct(rowData)} />
+                    onClick={() => deleteProduct(rowData)}/>
                         </div> : null
                         }
             </>
