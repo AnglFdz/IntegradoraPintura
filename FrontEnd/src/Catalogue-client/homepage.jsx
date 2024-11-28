@@ -1,4 +1,5 @@
 import React from "react";
+import { Menubar } from "primereact/menubar";
 import { Card } from 'primereact/card';
 import { Button } from "primereact/button";
 import 'primereact/resources/themes/saga-blue/theme.css';  // Cambia el tema si lo deseas
@@ -105,6 +106,7 @@ const Homepage = () => {
   return (
     <div>
       {/* Menu */}
+      <Menubar model={items} end={endElement} className="my-2" style={{backgroundColor:'var(--primary-300)',color:'var(--primary-color-text)',items:'var(--surface-0)'}} />
       {/* Cards */}
       <div className="p-grid p-dir-col">
             {/* Primera fila: 3 cards con col-4 */}

@@ -1,29 +1,40 @@
-import React, { useEffect, useState } from "react";
-import { useLocation } from "react-router-dom";
+import React, { useState, useEffect } from "react";
+import { DataTable } from 'primereact/datatable';
+import { Column } from 'primereact/column';
 
-const Cart = () => {
-  const [cartItems, setCartItems] = useState([]);
-  const location = useLocation();
+const Cart = (props) => {
+  // Recibimos los items del carrito a través de las props
+  const { items } = props;
+  const [cartItems, setCartItems] = useState(items); // Inicializamos el estado con los items pasados
 
   useEffect(() => {
-    // Accedemos al array de cartItems que fue enviado a través del estado
-    if (location.state && location.state.cartItems) {
-      setCartItems(location.state.cartItems); // Actualizamos el estado con los items
+    // Si los ítems de carrito cambian, actualizamos el estado
+    if (items.length > 0) {
+      setCartItems(items);
+
     }
-  }, [location.state]); // Aseguramos que esto se ejecute solo cuando location.state cambie
+  }, [items]); // Se ejecuta cada vez que los items cambian
 
   return (
     <div>
-      <h1>Carrito de Compras</h1>
-      <ul>
+      <div className="p-card p-3 shadow-2 border-round surface-0 mt-2" style={{ maxHeight: '700px', overflowY: 'auto' }}>
         {cartItems.length === 0 ? (
-          <li>El carrito está vacío.</li>
+          <h1>El carrito esta Vacio</h1>
         ) : (
           cartItems.map((item, index) => (
-            <li key={index}>{item.title}</li>
+            <div className="p-card my-1 p-3 shadow-2 border-round surface-0 " key={index}>
+              <div className="flex align-items-center gap-3">
+                <img src={item.image} alt="Placeholder" className="border-round" style={{ width: '150px', height: '150px', objectFit: 'cover', }} />
+                <div className="flex md:justify-content-between align-items-center flex-grow-1">
+                  <h2 className="text-xl font-bold my-2">{item.title}</h2>
+                  <p className="text-secondary my-2">This is a description inside the card. You can add more details here.</p>
+                  <button className="p-button p-button-primary mx-2">Eliminar</button>
+                </div>
+              </div>
+            </div>
           ))
         )}
-      </ul>
+      </div>
     </div>
   );
 };
