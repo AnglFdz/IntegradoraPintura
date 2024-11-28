@@ -1,11 +1,17 @@
-import React,{useState} from "react";
+import React, { useState } from "react";
 import { Menubar } from "primereact/menubar";
 import { Button } from "primereact/button";
-import  CardPrime  from "./components/Card";
+import CardPrime from "./components/Card";
+import Cart from "./components/Cart";
 import "primeicons/primeicons.css";
 
 const Catalogue = () => {
+  const [isVisible, setIsVisible] = useState(false);
+  const [isInVisible, setInVisible] = useState(true);
   const [cartCount, setCartCount] = useState(0);
+  const [activated, setActivated] = useState(false);
+  const [cartItems, setCartItems] = useState([]);
+
   const items = [
     {
       label: "Catalogo",
@@ -66,7 +72,11 @@ const Catalogue = () => {
       label: `Carrito ${cartCount > 0 ? cartCount : ""}`,
       icon: "pi pi-shopping-cart",
       command: () => {
-        console.log("Contact clicked");
+        if(!activated){
+setIsVisible(!isVisible)
+        setInVisible(!isInVisible)
+        setActivated(true);
+        }
       },
     },
   ];
@@ -128,33 +138,49 @@ const Catalogue = () => {
       stock: 0
     },
   ];
-  const endElement = <Button label="" icon="pi pi-arrow-circle-left" className="p-button-secondary" style={{backgroundColor:'var(--primary-300)',borderColor:'var(--primary-300)',color:'var(--surface-0)',}} />;
+  const endElement = <Button label="" icon="pi pi-arrow-circle-left" className="p-button-secondary" style={{ backgroundColor: 'var(--primary-300)', borderColor: 'var(--primary-300)', color: 'var(--surface-0)', }} />;
 
   const cart_items = []
- 
-  function insert_items_cart(item){
+
+  function insert_items_cart(item) {
     cart_items.push(item)
     setCartCount(cartCount + 1);
+    setCartItems((prevItems) => [...prevItems, item]);
   }
-  
+
   return (
     <div>
       {/* Menu */}
-      <Menubar model={items} end={endElement} className="my-2" style={{backgroundColor:'var(--primary-300)',color:'var(--primary-color-text)',items:'var(--surface-0)'}} />
-      {/* Cards */}   
-      <div className="grid">
+      <Menubar model={items} end={endElement} className="my-2" style={{ backgroundColor: 'var(--primary-300)', color: 'var(--primary-color-text)', items: 'var(--surface-0)' }} />
+      {/* Cards */}
+      <div className={isInVisible ? 'grid' : 'hidden'}>
         {cardData.map((card) => (
           <div key={card.id} className="col-12 flex align-items-center justify-content-center md:col-6 lg:col-3 ">
-            <CardPrime 
+            <CardPrime
               title={card.title}
               description={card.description}
               image={card.image}
               stock={card.stock}
-              onAction={() => insert_items_cart(card.title.toString())}
+              onAction={() => insert_items_cart(card)}
             />
           </div>
         ))}
       </div>
+      <div className={isVisible ? 'grid' : 'hidden'}>
+          <div className="col-12 md:col-7 lg:col-8">
+            <div className="mt-2 h-4rem border-round flex align-items-center justify-content-center" style={{ backgroundColor: 'var(--blue-900)', color: 'var(--primary-color-text)' }}>
+              <h1 className="font-bold ">Productos</h1>
+            </div>
+            <div>
+              <Cart items={cartItems}></Cart>
+            </div>
+          </div>
+          <div className="col-12 md:col-5 lg:col-4">
+            <div className="mt-2 h-4rem border-round flex align-items-center justify-content-center" style={{ backgroundColor: 'var(--blue-900)', color: 'var(--primary-color-text)' }}>
+              <h1 className="font-bold">Entrega</h1>
+            </div>
+          </div>
+        </div>
     </div>
   );
 };
