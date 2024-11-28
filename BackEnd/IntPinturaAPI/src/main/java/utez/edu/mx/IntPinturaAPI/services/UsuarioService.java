@@ -48,6 +48,29 @@ public class UsuarioService {
         return usuarioDao.findByEmail(mail);
     }
 
+    @Transactional
+    public UsuarioDto createUsuarioByRole(UsuarioDto usuarioDto, String roleName) {
+        // Buscar el rol en la base de datos
+        Optional<RoleBean> role = roleDao.findByNombre(roleName);
+        if (!role.isPresent()) {
+            throw new IllegalArgumentException("El rol especificado no existe");
+        }
+
+        // Crear y asignar el usuario con el rol encontrado
+        UsuarioBean usuario = new UsuarioBean();
+        usuario.setNombre(usuarioDto.getNombre());
+        usuario.setAp1(usuarioDto.getAp1());
+        usuario.setAp2(usuarioDto.getAp2());
+        usuario.setEmail(usuarioDto.getEmail());
+        usuario.setContrasena(usuarioDto.getContrasena());
+        usuario.setRole(role.get());
+
+        // Guardar el usuario en la base de datos
+        UsuarioBean savedUsuario = usuarioDao.save(usuario);
+        return toDTO(savedUsuario);
+    }
+
+
     // Crear o actualizar un usuario
     @Transactional
     public UsuarioDto saveUsuario(UsuarioDto usuarioDto) {
