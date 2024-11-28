@@ -111,13 +111,13 @@ const Homepage = () => {
       <div className="p-grid p-dir-col">
             {/* Primera fila: 3 cards con col-4 */}
             <div className="grid">
-                <div className="col-4 ">
+                <div className="col-12 md:col-4 lg:col-4 ">
                     <Card header={headerI} title="Interiores"/>
                 </div>
-                <div className="col-4 ">
+                <div className="col-12 md:col-4 lg:col-4">
                     <Card header={headerE} title="Exteriores"/>
                 </div>
-                <div className="col-4 ">
+                <div className="col-12 md:col-4 lg:col-4 ">
                     <Card header={headerM} title="Materiales"/>
                 </div>
             </div>
@@ -128,12 +128,7 @@ const Homepage = () => {
                     <Card header={headerEs} title="Especializada"/>
                 </div>
             </div>
-        </div>
-
-
-      
-
-
+      </div>
     </div>
   );
 };

@@ -6,7 +6,7 @@ function CardPrime({ title, description, image,stock,onAction }) {
   const header = <img alt={title} src={image} style={{ width: "100%" }} />;
   const footer = (
     <span>
-      <Button label="Action" icon="pi pi-cart-plus" onClick={onAction} disabled={stock == 0} />
+      <Button  label="Action" icon="pi pi-cart-plus" onClick={onAction} disabled={stock == 0} />
     </span>
   );
 

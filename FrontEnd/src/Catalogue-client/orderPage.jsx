@@ -5,6 +5,7 @@ import 'primereact/resources/themes/saga-blue/theme.css';  // Cambia el tema si 
 import 'primereact/resources/primereact.min.css';
 import "primeicons/primeicons.css";
 import 'primeflex/primeflex.css';
+import Cart from "./components/Cart";
 
 const Orderpage = () => {
     const items = [
@@ -82,6 +83,7 @@ const Orderpage = () => {
                 <div className="col-12 md:col-7 lg:col-8">
                     <div className="mt-2 h-4rem border-round flex align-items-center justify-content-center" style={{backgroundColor:'var(--blue-900)',color:'var(--primary-color-text)'}}>
                         <h1 className="font-bold ">Productos</h1>
+                        
                     </div>
 
                 </div>

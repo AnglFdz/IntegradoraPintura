@@ -1,10 +1,11 @@
-import React from "react";
+import React,{ useState } from "react";
 import { Menubar } from "primereact/menubar";
 import { Button } from "primereact/button";
 import  CardPrime  from "./components/Card";
 import "primeicons/primeicons.css";
 
 const Catalogue = () => {
+  const [cartCount, setCartCount] = useState(0);
   const items = [
     {
       label: "Catalogo",
@@ -62,7 +63,7 @@ const Catalogue = () => {
       ],
     },
     {
-      label: "Carrito",
+      label: `Carrito ${cartCount > 0 ? cartCount : ""}`,
       icon: "pi pi-shopping-cart",
       command: () => {
         console.log("Contact clicked");
@@ -130,11 +131,18 @@ const Catalogue = () => {
   ];
   const endElement = <Button label="" icon="pi pi-arrow-circle-left" className="p-button-secondary" style={{backgroundColor:'var(--primary-300)',borderColor:'var(--primary-300)',color:'var(--surface-0)',}} />;
 
+  const cart_items = []
+ 
+  function insert_items_cart(item){
+    cart_items.push(item)
+    setCartCount(cartCount + 1);
+  }
+  
   return (
     <div>
       {/* Menu */}
       <Menubar model={items} end={endElement} className="my-2" style={{backgroundColor:'var(--primary-300)',color:'var(--primary-color-text)',items:'var(--surface-0)'}} />
-      {/* Cards */}
+      {/* Cards */}   
       <div className="grid">
         {cardData.map((card) => (
           <div key={card.id} className="col-12 flex align-items-center justify-content-center md:col-6 lg:col-3 ">
@@ -143,7 +151,7 @@ const Catalogue = () => {
               description={card.description}
               image={card.image}
               stock={card.stock}
-              onAction={() => handleAction(card.id)}
+              onAction={() => insert_items_cart(card.title.toString())}
             />
           </div>
         ))}
