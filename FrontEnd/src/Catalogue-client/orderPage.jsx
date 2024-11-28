@@ -83,9 +83,10 @@ const Orderpage = () => {
                 <div className="col-12 md:col-7 lg:col-8">
                     <div className="mt-2 h-4rem border-round flex align-items-center justify-content-center" style={{backgroundColor:'var(--blue-900)',color:'var(--primary-color-text)'}}>
                         <h1 className="font-bold ">Productos</h1>
-                        
                     </div>
-
+                    <div>
+                    <Cart items="cart_items"></Cart>
+                    </div>
                 </div>
                 <div className="col-12 md:col-5 lg:col-4">
                 <div className="mt-2 h-4rem border-round flex align-items-center justify-content-center" style={{backgroundColor:'var(--blue-900)',color:'var(--primary-color-text)'}}>

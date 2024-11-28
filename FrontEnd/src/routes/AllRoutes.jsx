@@ -40,7 +40,6 @@ function AllRoutes() {
                         <Route path='/register' element={<Register />} />
                         <Route path='/store' element={<Homepage/>} />
                         <Route path='/store/items' element={<Catalogue/>}/>                   
-                        <Route path='/store/order' element={<Orderpage />}/>
                     </>
                 )}
             </Routes>
