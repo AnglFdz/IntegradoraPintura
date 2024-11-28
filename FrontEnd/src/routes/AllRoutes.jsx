@@ -8,6 +8,7 @@ import CataloguePage from '../Catalogue-client/pages/CataloguePage'
 import CatalogueEmployeePage from '../employee/pages/CatalogueEmployeePage'
 import Homepage from '../Catalogue-client/homepage'
 import Catalogue from '../Catalogue-client/catalogue'
+import ListItemsPage from '../Catalogue-client/pages/ListItemsPage'
 import Orderpage from '../Catalogue-client/orderPage'
 
 function AllRoutes() {
@@ -17,7 +18,7 @@ function AllRoutes() {
     const navigate = useNavigate();
 
     const Reload = () => {
-        setReload(!reload); 
+        setReload(!reload);
     };
 
     return (
@@ -28,8 +29,9 @@ function AllRoutes() {
                     <>
                         <Route path='/cataloge' element={<CataloguePage />} />
                         <Route path='/employee' element={<CatalogueEmployeePage />} />
-                <Route path='/home' element={<Homepage/>}/>
-                <Route path='/catalogue' element={<Catalogue/>} />
+                        <Route path='/employee/items' element={<ListItemsPage/>}/>
+                        <Route path='/home' element={<Homepage />} />
+                        <Route path='/catalogue' element={<Catalogue />} />
                     </>
                 ) : (
                     <>
