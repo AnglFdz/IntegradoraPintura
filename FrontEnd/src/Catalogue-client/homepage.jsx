@@ -72,7 +72,7 @@ const Homepage = () => {
       },
     },
   ];
-  const endElement = <Button label="" icon="pi pi-arrow-circle-left" className="p-button-secondary" style={{backgroundColor:'var(--primary-300)',borderColor:'var(--primary-300)',color:'var(--surface-0)',}} />;
+  const endElement = <Button label="" icon="pi pi-sign-out" className="p-button-secondary" style={{backgroundColor:'var(--primary-300)',borderColor:'var(--primary-300)',color:'var(--surface-0)',}} />;
   const headerI = (
     <img 
         alt="Card Image" 
