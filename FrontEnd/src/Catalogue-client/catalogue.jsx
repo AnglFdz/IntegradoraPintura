@@ -72,10 +72,10 @@ const Catalogue = () => {
       label: `Carrito ${cartCount > 0 ? cartCount : ""}`,
       icon: "pi pi-shopping-cart",
       command: () => {
-        if(!activated){
-setIsVisible(!isVisible)
-        setInVisible(!isInVisible)
-        setActivated(true);
+        if (!activated) {
+          setIsVisible(!isVisible)
+          setInVisible(!isInVisible)
+          setActivated(true);
         }
       },
     },
@@ -86,59 +86,67 @@ setIsVisible(!isVisible)
       title: "Card 1",
       description: "This is the first card.",
       image: "https://i.pinimg.com/736x/91/3b/b5/913bb5ba246e0f4ae2a7e7b97aecb7e2.jpg",
-      stock: 12
+      stock: 12,
+      price: 100
     },
     {
       id: 2,
       title: "Card 2",
       description: "This is the second card.",
       image: "https://i.pinimg.com/736x/15/da/f5/15daf568c0f4f004c9847203800eeadf.jpg",
-      stock: 12
+      stock: 12,
+      price: 100
     },
     {
       id: 3,
       title: "Card 3",
       description: "This is the third card.",
       image: "https://i.pinimg.com/736x/06/35/19/0635199fc09754bea87dbbc15722e901.jpg",
-      stock: 12
+      stock: 12,
+      price: 100
     },
     {
       id: 4,
       title: "Card 4",
       description: "This is the forth card.",
       image: "https://i.pinimg.com/736x/88/d1/1a/88d11a31a1ecd5e3bc04dcdaa02b2e24.jpg",
-      stock: 12
+      stock: 12,
+      price: 100
     },
     {
       id: 1,
       title: "Card 1",
       description: "This is the first card.",
       image: "https://i.pinimg.com/736x/d0/e1/bf/d0e1bf9b7859f421460969b33c73686b.jpg",
-      stock: 12
+      stock: 12,
+      price: 100
     },
     {
       id: 2,
       title: "Card 2",
       description: "This is the second card.",
       image: "https://i.pinimg.com/736x/97/49/98/974998cc07764ba374fbe3ada03345ab.jpg",
-      stock: 12
+      stock: 12,
+      price: 100
     },
     {
       id: 3,
       title: "Card 3",
       description: "This is the third card.",
       image: "https://i.pinimg.com/736x/36/e0/67/36e06701e26a017496fc1009cf24d92b.jpg",
-      stock: 12
+      stock: 12,
+      price: 100
     },
     {
       id: 4,
       title: "Card 4",
       description: "This is the forth card.",
       image: "https://i.pinimg.com/736x/f1/75/24/f17524202ca5612c81c2c7304389a1d1.jpg",
-      stock: 0
+      stock: 0,
+      price: 100
     },
   ];
-  const endElement = <Button label="" icon="pi pi-arrow-circle-left" className="p-button-secondary" style={{ backgroundColor: 'var(--primary-300)', borderColor: 'var(--primary-300)', color: 'var(--surface-0)', }} />;
+  const endElement = <Button label="" icon="pi pi-sign-out" className="p-button-secondary" style={{ backgroundColor: 'var(--primary-300)', borderColor: 'var(--primary-300)', color: 'var(--surface-0)', }} />;
 
   const cart_items = []
 
@@ -147,6 +155,7 @@ setIsVisible(!isVisible)
     setCartCount(cartCount + 1);
     setCartItems((prevItems) => [...prevItems, item]);
   }
+
 
   return (
     <div>
@@ -166,21 +175,10 @@ setIsVisible(!isVisible)
           </div>
         ))}
       </div>
-      <div className={isVisible ? 'grid' : 'hidden'}>
-          <div className="col-12 md:col-7 lg:col-8">
-            <div className="mt-2 h-4rem border-round flex align-items-center justify-content-center" style={{ backgroundColor: 'var(--blue-900)', color: 'var(--primary-color-text)' }}>
-              <h1 className="font-bold ">Productos</h1>
-            </div>
-            <div>
-              <Cart items={cartItems}></Cart>
-            </div>
-          </div>
-          <div className="col-12 md:col-5 lg:col-4">
-            <div className="mt-2 h-4rem border-round flex align-items-center justify-content-center" style={{ backgroundColor: 'var(--blue-900)', color: 'var(--primary-color-text)' }}>
-              <h1 className="font-bold">Entrega</h1>
-            </div>
-          </div>
-        </div>
+
+      <div className={isVisible ? '' : 'hidden'}>
+        <Cart items={cartItems} ></Cart>
+      </div>
     </div>
   );
 };

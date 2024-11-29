@@ -35,8 +35,11 @@ public class ProductoService {
 
     // Crear o actualizar producto
     public ProductoDto saveProducto(ProductoBean producto) {
-        return toDTO(productoRepository.save(producto));
+        ProductoBean savedProducto = productoRepository.save(producto);
+
+        return toDTO(savedProducto);
     }
+
 
     // Convertir de ProductoBean a ProductoDTO
     private ProductoDto toDTO(ProductoBean producto) {
