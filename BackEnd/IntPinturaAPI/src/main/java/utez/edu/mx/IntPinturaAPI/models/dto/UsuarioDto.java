@@ -21,7 +21,7 @@ public class UsuarioDto {
     private String ap2;
     private String email;
     private String contrasena;
-    private RoleBean role; // Un usuario tiene un único rol
+    private RoleBean role;
 
     // Constructor que recibe una entidad UsuarioBean
     public UsuarioDto(UsuarioBean usuarioEntity) {

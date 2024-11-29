@@ -34,12 +34,15 @@ public class ProductoController {
                 .orElseGet(() -> ResponseEntity.status(HttpStatus.NOT_FOUND).body(new ApiResponse(HttpStatus.NOT_FOUND, true, "Producto no encontrado")));
     }
 
-    // Crear producto
     @PostMapping
     public ResponseEntity<ApiResponse> saveProducto(@RequestBody ProductoDto productoDto) {
         ProductoBean productoBean = new ProductoBean();
         productoBean.setNombre(productoDto.getNombre());
         productoBean.setPrecio(productoDto.getPrecio());
+        productoBean.setDescripcion(productoDto.getDescripcion());
+        productoBean.setStock(productoDto.getStock());
+        productoBean.setImagen(productoDto.getImagen());
+        System.out.println(productoBean);
 
         ProductoDto savedProducto = productoService.saveProducto(productoBean);
         return ResponseEntity.status(HttpStatus.CREATED).body(new ApiResponse(savedProducto, HttpStatus.CREATED));
@@ -50,17 +53,16 @@ public class ProductoController {
     public ResponseEntity<ApiResponse> updateProducto(@PathVariable Integer id, @RequestBody ProductoDto productoDto) {
         Optional<ProductoDto> existingProducto = productoService.getProductoById(id);
         if (existingProducto.isPresent()) {
-            ProductoBean productoBean = new ProductoBean();
+            ProductoBean productoBean = productoDto.toEntity();
             productoBean.setId_producto(id);
-            productoBean.setNombre(productoDto.getNombre());
-            productoBean.setPrecio(productoDto.getPrecio());
-
             ProductoDto updatedProducto = productoService.saveProducto(productoBean);
             return ResponseEntity.ok(new ApiResponse(updatedProducto, HttpStatus.OK));
         } else {
-            return ResponseEntity.status(HttpStatus.NOT_FOUND).body(new ApiResponse(HttpStatus.NOT_FOUND, true, "Producto no encontrado"));
+            return ResponseEntity.status(HttpStatus.NOT_FOUND)
+                    .body(new ApiResponse(HttpStatus.NOT_FOUND, true, "Producto no encontrado"));
         }
     }
+
 
     // Eliminar producto
     @DeleteMapping("/{id}")
