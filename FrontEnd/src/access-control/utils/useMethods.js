@@ -6,15 +6,15 @@ import CryptoJS from 'crypto-js';
 const successMessage = ["Inicio de sesión correcto"];
 const errorMessage = ["Usuario o contraseña incorrectos"];
 
-export const getToken = () => {
+export const getData = (option) => {
     const session = localStorage.getItem('session');
     if (session === null) {
         return null;
     } else {
         const sessionData = JSON.parse(session);
         const bytes = CryptoJS.AES.decrypt(sessionData.user, 'pintura');
-        const token = JSON.parse(bytes.toString(CryptoJS.enc.Utf8)).token;
-        return token;
+        const data = option === 'token' ? JSON.parse(bytes.toString(CryptoJS.enc.Utf8)).token : JSON.parse(bytes.toString(CryptoJS.enc.Utf8)).role;
+        return data;
     }
 }
 
@@ -91,8 +91,8 @@ export const loginMethod = ({ newData, reload, navigate }) => {
 
 export const login = async ({ data }) => {
     const response = await Connection.sendLogin(data);
-    const newData = response.data.data;
     if (response.status === 200) {
+    const newData = response.data.data;
         return newData;
     } else {
         return null;

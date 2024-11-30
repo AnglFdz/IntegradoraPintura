@@ -11,10 +11,11 @@ import Catalogue from '../Catalogue-client/catalogue'
 import ListItemsPage from '../Catalogue-client/pages/ListItemsPage'
 import Orderpage from '../Catalogue-client/orderPage'
 import Dashboard from '../Administer/Dashboard'
+import { getData } from '../access-control/utils/useMethods'
 
 function AllRoutes() {
-    const validSessionExist = localStorage.getItem('session');
-    const [role, setRole] = React.useState(validSessionExist ? JSON.parse(validSessionExist).rol : null);
+    const validSessionExist = getData('role');
+    const [role, setRole] = React.useState(validSessionExist ? validSessionExist : null);
     const [reload, setReload] = React.useState(false);
     const navigate = useNavigate();
 

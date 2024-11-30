@@ -62,7 +62,7 @@ function ListProducts() {
     useEffect(() => {   
         if(isMounted){
         }
-    }, [isMounted, productosCarrito, reload]);
+    }, [isMounted, productosCarrito]);
     return (
         <>
             <div className="flex flex-row w-full">

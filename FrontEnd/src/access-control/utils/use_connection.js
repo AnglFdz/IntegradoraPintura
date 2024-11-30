@@ -1,5 +1,5 @@
 import ApiManager from '../../global-components/apiManager';
-import { getToken } from './useMethods';
+import { getData } from './useMethods';
 
 
 export const sendLogin = async (data) => {
@@ -25,7 +25,7 @@ export const catchProducts = async () => {
     try {
         const response = await ApiManager.get('/productos', {
             headers: {
-                'Authorization': `Bearer ${getToken()}`
+                'Authorization': `Bearer ${getData('token')}`
             }
         });
         return response;
@@ -38,7 +38,7 @@ export const deleteProduct = async (id) => {
     try {
         const response = await ApiManager.delete(`/productos/${id}`, {
             headers: {
-                'Authorization': `Bearer ${getToken()}`
+                'Authorization': `Bearer ${getData('token')}`
             }
         });
         return response;
@@ -52,7 +52,7 @@ export const addProduct = async (data) => {
     try {
         const response = await ApiManager.post('/productos', data, {
             headers: {
-                'Authorization': `Bearer ${getToken()}`
+                'Authorization': `Bearer ${getData()}`
             }
         });
         return response;
