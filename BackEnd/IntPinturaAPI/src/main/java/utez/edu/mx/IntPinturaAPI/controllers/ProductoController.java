@@ -34,35 +34,21 @@ public class ProductoController {
                 .orElseGet(() -> ResponseEntity.status(HttpStatus.NOT_FOUND).body(new ApiResponse(HttpStatus.NOT_FOUND, true, "Producto no encontrado")));
     }
 
+    // Crear producto
     @PostMapping
     public ResponseEntity<ApiResponse> saveProducto(@RequestBody ProductoDto productoDto) {
-        ProductoBean productoBean = new ProductoBean();
-        productoBean.setNombre(productoDto.getNombre());
-        productoBean.setPrecio(productoDto.getPrecio());
-        productoBean.setDescripcion(productoDto.getDescripcion());
-        productoBean.setStock(productoDto.getStock());
-        productoBean.setImagen(productoDto.getImagen());
-        System.out.println(productoBean);
-
-        ProductoDto savedProducto = productoService.saveProducto(productoBean);
+        ProductoDto savedProducto = productoService.createProducto(productoDto);
         return ResponseEntity.status(HttpStatus.CREATED).body(new ApiResponse(savedProducto, HttpStatus.CREATED));
     }
 
     // Actualizar producto
     @PutMapping("/{id}")
     public ResponseEntity<ApiResponse> updateProducto(@PathVariable Integer id, @RequestBody ProductoDto productoDto) {
-        Optional<ProductoDto> existingProducto = productoService.getProductoById(id);
-        if (existingProducto.isPresent()) {
-            ProductoBean productoBean = productoDto.toEntity();
-            productoBean.setId_producto(id);
-            ProductoDto updatedProducto = productoService.saveProducto(productoBean);
-            return ResponseEntity.ok(new ApiResponse(updatedProducto, HttpStatus.OK));
-        } else {
-            return ResponseEntity.status(HttpStatus.NOT_FOUND)
-                    .body(new ApiResponse(HttpStatus.NOT_FOUND, true, "Producto no encontrado"));
-        }
+        Optional<ProductoDto> updatedProducto = productoService.updateProducto(id, productoDto);
+        return updatedProducto.map(dto -> ResponseEntity.ok(new ApiResponse(dto, HttpStatus.OK)))
+                .orElseGet(() -> ResponseEntity.status(HttpStatus.NOT_FOUND)
+                        .body(new ApiResponse(HttpStatus.NOT_FOUND, true, "Producto no encontrado")));
     }
-
 
     // Eliminar producto
     @DeleteMapping("/{id}")

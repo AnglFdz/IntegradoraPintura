@@ -28,18 +28,34 @@ public class ProductoService {
         return productoRepository.findById(id).map(this::toDTO);
     }
 
-    // Obtener producto por nombre
-    public Optional<ProductoDto> getProductoByNombre(String nombre) {
-        return productoRepository.findByNombre(nombre).map(this::toDTO);
-    }
-
-    // Crear o actualizar producto
-    public ProductoDto saveProducto(ProductoBean producto) {
+    // Crear producto
+    public ProductoDto createProducto(ProductoDto productoDto) {
+        ProductoBean producto = productoDto.toEntity();
         ProductoBean savedProducto = productoRepository.save(producto);
-
         return toDTO(savedProducto);
     }
 
+    // Actualizar producto
+    public Optional<ProductoDto> updateProducto(Integer id, ProductoDto productoDto) {
+        Optional<ProductoBean> existingProducto = productoRepository.findById(id);
+        if (existingProducto.isPresent()) {
+            ProductoBean producto = existingProducto.get();
+            producto.setNombre(productoDto.getNombre());
+            producto.setStock(productoDto.getStock());
+            producto.setPrecio(productoDto.getPrecio());
+            producto.setDescripcion(productoDto.getDescripcion());
+            producto.setCategoria(productoDto.getCategoria());
+            producto.setImagen(productoDto.getImagen());
+            ProductoBean updatedProducto = productoRepository.save(producto);
+            return Optional.of(toDTO(updatedProducto));
+        }
+        return Optional.empty();
+    }
+
+    // Eliminar producto
+    public void deleteProducto(Integer id) {
+        productoRepository.deleteById(id);
+    }
 
     // Convertir de ProductoBean a ProductoDTO
     private ProductoDto toDTO(ProductoBean producto) {
@@ -49,12 +65,8 @@ public class ProductoService {
                 .stock(producto.getStock())
                 .precio(producto.getPrecio())
                 .descripcion(producto.getDescripcion())
+                .categoria(producto.getCategoria())
                 .imagen(producto.getImagen())
                 .build();
-    }
-
-    // Método adicional para eliminar producto (opcional)
-    public void deleteProducto(Integer id) {
-        productoRepository.deleteById(id);
     }
 }

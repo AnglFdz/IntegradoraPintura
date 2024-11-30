@@ -6,6 +6,8 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 import utez.edu.mx.IntPinturaAPI.models.entity.ProductoBean;
 
+import jakarta.validation.constraints.NotBlank;
+
 @Getter
 @AllArgsConstructor
 @NoArgsConstructor
@@ -17,7 +19,10 @@ public class ProductoDto {
     private int stock;
     private double precio;
     private String descripcion;
+
+    @NotBlank(message = "La categoría no puede estar vacía")
     private String categoria;
+
     private byte[] imagen;
 
     public ProductoBean toEntity() {
