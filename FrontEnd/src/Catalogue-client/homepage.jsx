@@ -72,7 +72,7 @@ const Homepage = () => {
       },
     },
   ];
-  const endElement = <Button label="" icon="pi pi-sign-out" className="p-button-secondary" style={{backgroundColor:'var(--primary-300)',borderColor:'var(--primary-300)',color:'var(--surface-0)',}} />;
+  const endElement = <Button label="" icon="pi pi-sign-out" className="p-button-secondary" style={{ backgroundColor: 'var(--surface-300)', borderColor: 'var(--surface-300)', color: 'var(--surface-0)', }} />;
   const headerI = (
     <img 
         alt="Card Image" 
@@ -106,7 +106,7 @@ const Homepage = () => {
   return (
     <div>
       {/* Menu */}
-      <Menubar model={items} end={endElement} className="my-2" style={{backgroundColor:'var(--primary-300)',color:'var(--primary-color-text)',items:'var(--surface-0)'}} />
+      <Menubar model={items} end={endElement} className="my-2" style={{ backgroundColor: 'var(--surface-300)', color: 'var(--primary-color-text)', items: 'var(--surface-0)' }} />
       {/* Cards */}
       <div className="p-grid p-dir-col">
             {/* Primera fila: 3 cards con col-4 */}

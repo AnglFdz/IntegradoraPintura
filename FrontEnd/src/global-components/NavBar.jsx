@@ -2,6 +2,8 @@ import React from 'react'
 import { Menubar } from "primereact/menubar";
 
 function NavBar({session}) {
+
+    if (session == ""){
     const items = [
         {
             label: "Catalogo",
@@ -66,19 +68,18 @@ function NavBar({session}) {
             },
         },
     ];
-    const customColors = {
-        backgroundColor: "#0B1957",
-        color: "white",
-        border: "none",
-    };
-    const customSize = {
-        max_width: "200px",
-    };
+    
     return (
         <>
             <Menubar model={items} className="my-2" style={{background: 'var(--surface-300)', color:'var(--primary-color-text)',items:'var(--surface-0)'}} />
         </>
     )
+    }
+    else{
+        return(
+            <></>
+        )
+    }
 }
 
 export default NavBar

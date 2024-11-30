@@ -3,6 +3,7 @@ import { Card } from "primereact/card";
 import { Button } from "primereact/button";
 
 function CardPrime({ title, description, image,stock,onAction }) {
+  
   const header = <img alt={title} src={image} style={{ width: "100%" }} />;
   const footer = (
     <span>
@@ -20,7 +21,6 @@ function CardPrime({ title, description, image,stock,onAction }) {
       className="md:w-30rem" // Clase de PrimeFlex para margen inferior
     > 
       <p>stock: {stock}</p>
-      <p className="m-0">This is a dynamic card using PrimeReact.</p>
     </Card>
   );
 }
