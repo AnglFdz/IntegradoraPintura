@@ -3,7 +3,7 @@ import ProductCard from './ProductCard';
 import { VirtualScroller } from 'primereact/virtualscroller';
 import { InputText } from 'primereact/inputtext';
 
-function Cart({products, remove}) {
+function Cart({products, remove, add}) {
   const [isMounted, setIsMounted] = React.useState(false);
   const [total, setTotal] = React.useState(0);
   const [cambio, setCambio] = React.useState(0);
@@ -30,7 +30,7 @@ function Cart({products, remove}) {
   const itemTemplate = (items) => {
     return (
       <div className="ml-5">
-      <ProductCard item={items} onRemove={remove} />
+      <ProductCard item={items} onRemove={remove} onAdd={add} />
       </div>
     );
 };

@@ -13,7 +13,7 @@ export const getData = (option) => {
     } else {
         const sessionData = JSON.parse(session);
         const bytes = CryptoJS.AES.decrypt(sessionData.user, 'pintura');
-        const data = option === 'token' ? JSON.parse(bytes.toString(CryptoJS.enc.Utf8)).token : JSON.parse(bytes.toString(CryptoJS.enc.Utf8)).role;
+        const data = option === 'token' ? JSON.parse(bytes.toString(CryptoJS.enc.Utf8)).token : option === 'role' ? JSON.parse(bytes.toString(CryptoJS.enc.Utf8)).role : JSON.parse(bytes.toString(CryptoJS.enc.Utf8)).id;
         return data;
     }
 }
@@ -73,6 +73,7 @@ export const validMail = (email) => {
 
 export const loginMethod = ({ newData, reload, navigate }) => {
     const userInfo = {
+        id: newData.user.id_usuario,
         name: newData.user.nombre,
         ap1: newData.user.ap1,
         ap2: newData.user.ap2,

@@ -1,5 +1,5 @@
 import React from 'react'
-import { Route, Router, Routes, useNavigate } from 'react-router-dom'
+import { Route, Routes, useNavigate } from 'react-router-dom'
 import NavBar from '../global-components/NavBar'
 import Login from '../access-control/components/Login'
 import RecoveryPassword from '../access-control/components/RecoveryPassword'
@@ -17,6 +17,8 @@ function AllRoutes() {
     const [role, setRole] = React.useState(validSessionExist ? validSessionExist : null);
     const [reload, setReload] = React.useState(false);
     const navigate = useNavigate();
+    console.log(role);
+    
 
     const Reload = () => {
         setReload(!reload);
