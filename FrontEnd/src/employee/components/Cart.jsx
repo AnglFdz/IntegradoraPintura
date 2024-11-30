@@ -1,69 +1,35 @@
 import React from 'react'
 import ProductCard from './ProductCard';
 import { VirtualScroller } from 'primereact/virtualscroller';
+import { InputText } from 'primereact/inputtext';
 
-function Cart() {
-  const [products, setProducts] = React.useState([{
-    id: 1,
-    name: 'Pintura',
-    price: 20,
-    quantity: 1
-  },
-  {
-    id: 2,
-    name: 'Pincel',
-    price: 10,
-    quantity: 2
-  },
-  {
-    id: 3,
-    name: 'Lienzo',
-    price: 50,
-    quantity: 1
-  },
-  {
-    id: 4,
-    name: 'Lienzo',
-    price: 50,
-    quantity: 1
-  },
-  {
-    id: 5,
-    name: 'Lienzo',
-    price: 50,
-    quantity: 1
-  },
-  {
-    id: 6,
-    name: 'Lienzo',
-    price: 50,
-    quantity: 1
-  },
-  {
-    id: 6,
-    name: 'Lienzo',
-    price: 50,
-    quantity: 1
-  },
-  {
-    id: 6,
-    name: 'Lienzo',
-    price: 50,
-    quantity: 1
-  },
-  {
-    id: 6,
-    name: 'Lienzo',
-    price: 50,
-    quantity: 1
+function Cart({products, remove}) {
+  const [isMounted, setIsMounted] = React.useState(false);
+  const [total, setTotal] = React.useState(0);
+  const [cambio, setCambio] = React.useState(0);
+  const [pago, setPago] = React.useState(0);
+
+  const calcularPago = () =>{
+    let total = 0;
+    products.forEach((item) => {
+      total += item.precio * item.cantidad;
+    });
+    setTotal(total);
+    setCambio(pago - total);
   }
-  ]);
-  
-  const [items] = React.useState(products);
 
-  const itemTemplate = (item, options) => {
+  React.useEffect(() => {
+    setIsMounted(true);
+  }, []);
+  React.useEffect(() => { 
+    if(isMounted){
+      calcularPago();
+    }  
+  }, [isMounted, products, pago]);
+
+  const itemTemplate = (items) => {
     return (
-      <ProductCard />
+      <ProductCard item={items} onRemove={remove} />
     );
 };
 
@@ -71,7 +37,7 @@ function Cart() {
     <>
       <div className="border-1 border-round-xl p-4 h-auto field">
         <div>
-        <VirtualScroller items={items} itemSize={100} itemTemplate={itemTemplate} className="border-1 surface-border border-round" style={{ width: '27rem', height: '25rem' }} />
+        <VirtualScroller items={products} itemSize={100} itemTemplate={itemTemplate} className="border-1 surface-border border-round" style={{ width: '27rem', height: '25rem' }} />
         </div>
         <div className='field flex justify-content-start align-items-center text-xl bg-gray-900 w-full border-round-xl mt-2'>
           <div className=' grid'>
@@ -83,9 +49,9 @@ function Cart() {
                 <button>Hola mundo</button>
               </div>
               <div>
-                <p className='text-50'>$0.00 </p>
-                <p className='flex justify-content-center bg-bluegray-50 text-black-alpha-900 p-1 border-round-sm'>0.00</p>
-                <p className='text-50'>$0.00 </p>
+                <p className='text-50'>${total} </p>
+                <InputText onChange={(e)=> setPago(e.target.value)} keyfilter={'pnum'} className='flex justify-content-center w-5rem bg-bluegray-50 text-black-alpha-900 p-1 border-round-sm'/>
+                <p className='text-50'>${pago && total ? cambio : 0.00} </p>
                 <p className='text-black-alpha-900'>l</p>
               </div>
               <div>

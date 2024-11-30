@@ -2,7 +2,7 @@ import React, { useState, useEffect } from 'react'
 import { Button } from 'primereact/button'
 import { InputText } from 'primereact/inputtext'
 import { Password } from 'primereact/password'
-import { validMail, loginMethod, sendMessage } from '../utils/useMethods'
+import { validMail, login as LG, sendMessage, loginMethod } from '../utils/useMethods'
 import { useNavigate } from 'react-router-dom'
 import img from '../../assets/prueba.png'
 
@@ -26,22 +26,24 @@ function Login({reload}) {
         }
     }, [email, password])
 
-    const login = async (e) => {
+    const startLogin = async (e) => {
         e.preventDefault()
-        sendMessage('login', 'load');
+        sendMessage('load', 0)
         const data = {
-            mail: email,
-            pass: password
-        }
-        const start = await loginMethod({data, reload, navigate});
-        console.table({email, password});     
+            usuario: email,
+            contrasenia: password
+        }    
+        const start = await LG({data});
+        start ? sendMessage(200, 0) : null
+        start ? loginMethod({newData: start, reload, navigate}) : sendMessage(400, 0)
+        
     }
 
     return (
         <>
             <div className="container">
                 <div className="col-12 h-screen flex justify-content-center align-items-center">
-                    <form onSubmit={login} className='shadow-3 p-5 border-round flex justify-content-center align-items-center flex-column'>
+                    <form onSubmit={startLogin} className='shadow-3 p-5 border-round flex justify-content-center align-items-center flex-column'>
                             <img src={img} alt="" className='border-circle' style={{width: '140px'}} />
                             <span className='col-12'>Correo Electronico:</span>
                             <InputText keyfilter="email" className='col-12' onChange={(e) => setEmail(e.target.value)} />
