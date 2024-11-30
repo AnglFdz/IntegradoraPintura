@@ -62,7 +62,7 @@ function ListProducts() {
     useEffect(() => {   
         if(isMounted){
         }
-    }, [isMounted, productosCarrito, reload]);
+    }, [isMounted, productosCarrito]);
     return (
         <>
             <div className="flex flex-row w-full">
@@ -79,7 +79,7 @@ function ListProducts() {
                     <ItemsList page='employee' products={obtenerProductosCarrito} />
                 </div>
                 <div className="col-4">
-                    <Cart products={productosCarrito} remove={deleteProduct} />
+                    <Cart products={productosCarrito} remove={deleteProduct} add={obtenerProductosCarrito} />
                 </div>
             </div>
         </>

@@ -3,7 +3,7 @@ import ProductCard from './ProductCard';
 import { VirtualScroller } from 'primereact/virtualscroller';
 import { InputText } from 'primereact/inputtext';
 
-function Cart({products, remove}) {
+function Cart({products, remove, add}) {
   const [isMounted, setIsMounted] = React.useState(false);
   const [total, setTotal] = React.useState(0);
   const [cambio, setCambio] = React.useState(0);
@@ -29,15 +29,17 @@ function Cart({products, remove}) {
 
   const itemTemplate = (items) => {
     return (
-      <ProductCard item={items} onRemove={remove} />
+      <div className="ml-5">
+      <ProductCard item={items} onRemove={remove} onAdd={add} />
+      </div>
     );
 };
 
   return (
     <>
-      <div className="border-1 border-round-xl p-4 h-auto field">
+      <div className="border-1 border-round-xl p-1 h-auto field">
         <div>
-        <VirtualScroller items={products} itemSize={100} itemTemplate={itemTemplate} className="border-1 surface-border border-round" style={{ width: '27rem', height: '25rem' }} />
+        <VirtualScroller items={products} itemSize={155} itemTemplate={itemTemplate} className="col-12 border-1 bg-red-300 surface-border border-round" style={{ width: 'auto', height: '25rem' }}  />
         </div>
         <div className='field flex justify-content-start align-items-center text-xl bg-gray-900 w-full border-round-xl mt-2'>
           <div className=' grid'>

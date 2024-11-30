@@ -1,5 +1,5 @@
 import React from 'react'
-import { Route, Router, Routes, useNavigate } from 'react-router-dom'
+import { Route, Routes, useNavigate } from 'react-router-dom'
 import NavBar from '../global-components/NavBar'
 import Login from '../access-control/components/Login'
 import RecoveryPassword from '../access-control/components/RecoveryPassword'
@@ -10,13 +10,16 @@ import Homepage from '../Catalogue-client/homepage'
 import Catalogue from '../Catalogue-client/catalogue'
 import ListItemsPage from '../Catalogue-client/pages/ListItemsPage'
 import Dashboard from '../Administer/Dashboard'
+import { getData } from '../access-control/utils/useMethods'
 
 
 function AllRoutes() {
-    const validSessionExist = localStorage.getItem('session');
-    const [role, setRole] = React.useState(validSessionExist ? JSON.parse(validSessionExist).rol : null);
+    const validSessionExist = getData('role');
+    const [role, setRole] = React.useState(validSessionExist ? validSessionExist : null);
     const [reload, setReload] = React.useState(false);
     const navigate = useNavigate();
+    console.log(role);
+    
 
     const Reload = () => {
         setReload(!reload);
