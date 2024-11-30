@@ -3,10 +3,16 @@ import { InputNumber } from 'primereact/inputnumber';
 import { Button } from "primereact/button";
 import "primeicons/primeicons.css";
 import 'primeflex/primeflex.css';
-
+import { addOrder } from "../../access-control/utils/use_connection";
+ 
 const Cart = (props) => {
   const { items } = props;
   const [cartItems, setCartItems] = useState(items);
+
+  const data = {
+    id
+  }
+
 
   useEffect(() => {
     if (items.length > 0) {
@@ -86,6 +92,9 @@ const Cart = (props) => {
             <div
               className="shadow-2 border-round p-3 flex align-items-center justify-content-center"style={{ background: "var(--blue-900)",color: "#fff",fontSize: "2.5rem",fontWeight: "bold",width: "100%",textAlign: "center",}}>
               ${total.toFixed(2)}
+            </div>
+            <div className=" w-full ">
+              <Button className="w-full my-2 align-items-center justify-content-center">Realizar Pedido</Button>
             </div>
           </div>
         </div>

@@ -2,7 +2,7 @@ import React from "react";
 import { Menubar } from "primereact/menubar";
 import { Card } from 'primereact/card';
 import { Button } from "primereact/button";
-import 'primereact/resources/themes/saga-blue/theme.css';  // Cambia el tema si lo deseas
+import 'primereact/resources/themes/saga-blue/theme.css'; 
 import 'primereact/resources/primereact.min.css';
 import "primeicons/primeicons.css";
 import 'primeflex/primeflex.css';
@@ -28,39 +28,19 @@ const Homepage = () => {
           icon: "pi pi-palette",
           items: [
             {
-              label: "Anti-bacterial",
+              label: "Interiores",
             },
             {
-              label: "Acrilica",
+              label: "Exteriores",
             },
             {
-              label: "Vinilada",
-            },
-            {
-              label: "Cromatica",
-            },
-            {
-              label: "Aerosol",
+              label: "Especializada",
             },
           ],
         },
         {
-          label: "Material de Pintura",
+          label: "Materiales de Pintura",
           icon: "pi pi-objects-column",
-          items: [
-            {
-              label: "Brochas",
-            },
-            {
-              label: "Rodillos",
-            },
-            {
-              label: "Cintas",
-            },
-            {
-              label: "Guantes y Mascaras",
-            },
-          ],
         },
       ],
     },

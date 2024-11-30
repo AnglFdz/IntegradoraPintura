@@ -137,6 +137,17 @@ export const setProduct = async ({ data }) => {
     }
 }
 
+export const setOrder = async ({data}) => {
+    sendMessage('load',0);
+    const response = await Connection.addOrder(data);
+    if(response.status === 201) {
+        sendMessage(200, 0);
+        return response
+    } else {
+        return null;
+    }
+}
+
 
 export const eliminateProduct = async ({data}) => {
     sendMessage('load', 0);

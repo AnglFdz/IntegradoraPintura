@@ -17,6 +17,7 @@ public class ProductoDto {
     private int stock;
     private double precio;
     private String descripcion;
+    private String categoria;
     private byte[] imagen;
 
     public ProductoBean toEntity() {
@@ -26,6 +27,7 @@ public class ProductoDto {
                 .stock(this.stock)
                 .precio(this.precio)
                 .descripcion(this.descripcion)
+                .categoria(this.categoria)
                 .imagen(this.imagen)
                 .build();
     }

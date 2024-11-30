@@ -2,7 +2,7 @@ import React from "react";
 import { Card } from "primereact/card";
 import { Button } from "primereact/button";
 
-function CardPrime({ title, description, image,stock,onAction }) {
+function CardPrime({ title, description, image, stock,categoria, onAction }) {
   
   const header = <img alt={title} src={image} style={{ width: "100%" }} />;
   const footer = (
@@ -21,6 +21,7 @@ function CardPrime({ title, description, image,stock,onAction }) {
       className="md:w-30rem" // Clase de PrimeFlex para margen inferior
     > 
       <p>stock: {stock}</p>
+      <p>Categoria: {categoria}</p>
     </Card>
   );
 }

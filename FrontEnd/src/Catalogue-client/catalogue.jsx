@@ -1,4 +1,4 @@
-import React, { useState,useEffect } from "react";
+import React, { useState, useEffect } from "react";
 import { Menubar } from "primereact/menubar";
 import { Button } from "primereact/button";
 import CardPrime from "./components/Card";
@@ -13,75 +13,55 @@ const Catalogue = () => {
   const [activated, setActivated] = useState(false);
   const [cartItems, setCartItems] = useState([]);
   const [products, setProducts] = useState([]);
+  const [selectedCategory, setSelectedCategory] = useState("All");
 
   useEffect(() => {
     const fetchProducts = async () => {
       try {
-        const productsData = await getProducts();
-        if (productsData) {
-          setProducts(productsData);  
-        } else {
-          setError("No se pudieron cargar los productos");  
-        }
-      } catch (error) { 
-        console.log(error)
-      }  
+        const fetchedProducts = await getProducts(); 
+        setProducts(fetchedProducts);
+        
+      } catch (error) {
+        console.error("Error fetching products:", error);
+      }
     };
-    fetchProducts();  
+    fetchProducts();
   }, []);
+
   const items = [
     {
       label: "Catalogo",
       icon: "pi pi-shopping-bag",
       command: () => {
-        console.log("Home clicked");
+        setSelectedCategory("All"); // Mostrar todos los productos
       },
     },
     {
       label: "Categorias",
       icon: "pi pi-sliders-h",
-      command: () => {
-        console.log("About clicked");
-      },
       items: [
         {
           label: "Pinturas",
           icon: "pi pi-palette",
           items: [
             {
-              label: "Anti-bacterial",
+              label: "Interiores",
+              command: () => setSelectedCategory("Interiores"), // Filtrar por interiores
             },
             {
-              label: "Acrilica",
+              label: "Exteriores",
+              command: () => setSelectedCategory("Exteriores"), // Filtrar por exteriores
             },
             {
-              label: "Vinilada",
-            },
-            {
-              label: "Cromatica",
-            },
-            {
-              label: "Aerosol",
+              label: "Especializada",
+              command: () => setSelectedCategory("Especializada"), // Filtrar por especializada
             },
           ],
         },
         {
-          label: "Material de Pintura",
+          label: "Materiales de Pintura",
           icon: "pi pi-objects-column",
-          items: [
-            {
-              label: "Brochas",
-            },
-            {
-              label: "Rodillos",
-            },
-            {
-              label: "Cintas",
-            },
-            {
-              label: "Guantes y Mascaras",
-            },
-          ],
+          command: () => setSelectedCategory("Materiales"), // Filtrar por materiales
         },
       ],
     },
@@ -90,46 +70,75 @@ const Catalogue = () => {
       icon: "pi pi-shopping-cart",
       command: () => {
         if (!activated) {
-          setIsVisible(!isVisible)
-          setInVisible(!isInVisible)
+          setIsVisible(!isVisible);
+          setInVisible(!isInVisible);
           setActivated(true);
         }
       },
     },
   ];
-  const endElement = <Button label="" icon="pi pi-sign-out" className="p-button-secondary" style={{ backgroundColor: 'var(--primary-300)', borderColor: 'var(--primary-300)', color: 'var(--surface-0)', }} />;
 
-  const cart_items = []
+  const endElement = (
+    <Button
+      label=""
+      icon="pi pi-sign-out"
+      className="p-button-secondary"
+      style={{
+        backgroundColor: "var(--primary-300)",
+        borderColor: "var(--primary-300)",
+        color: "var(--primary-color-text)",
+      }}
+    />
+  );
+
+  const cart_items = [];
 
   function insert_items_cart(item) {
-    cart_items.push(item)
+    cart_items.push(item);
     setCartCount(cartCount + 1);
     setCartItems((prevItems) => [...prevItems, item]);
   }
 
+  // Filtrar los productos según la categoría seleccionada
+  const filteredProducts =
+    selectedCategory === "All"
+      ? products
+      : products.filter((product) => product.categoria === selectedCategory);
 
   return (
     <div>
       {/* Menu */}
-      <Menubar model={items} end={endElement} className="my-2" style={{ backgroundColor: 'var(--primary-300)', color: 'var(--primary-color-text)', items: 'var(--surface-0)' }} />
+      <Menubar
+        model={items}
+        end={endElement}
+        className="my-2"
+        style={{
+          backgroundColor: "var(--primary-300)",
+          color: "var(--primary-color-text)",
+          items: "var(--surface-0)",
+        }}
+      />
       {/* Cards */}
-      <div className={isInVisible ? 'grid' : 'hidden'}>
-        {products.map((card) => (
-          <div key={card.id_producto} className="col-12 flex align-items-center justify-content-center md:col-6 lg:col-3 ">
+      <div className={isInVisible ? "grid" : "hidden"}>
+        {filteredProducts.map((card) => (
+          <div
+            key={card.id_producto}
+            className="col-12 flex align-items-center justify-content-center md:col-6 lg:col-3 "
+          >
             <CardPrime
               title={card.nombre}
               description={card.descripcion}
               image={card.imagen}
               stock={card.stock}
-
+              footer={card.categoria}
               onAction={() => insert_items_cart(card)}
             />
           </div>
         ))}
       </div>
 
-      <div className={isVisible ? '' : 'hidden'}>
-        <Cart items={cartItems} ></Cart>
+      <div className={isVisible ? "" : "hidden"}>
+        <Cart items={cartItems}></Cart>
       </div>
     </div>
   );

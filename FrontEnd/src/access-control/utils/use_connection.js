@@ -60,3 +60,16 @@ export const addProduct = async (data) => {
         return error;
     }
 }
+
+export const addOrder = async (data) => {
+    try {
+        const response = await ApiManager.post('/pedidos', data, {
+            headers: {
+                'Authorization': `Bearer ${getToken()}`
+            }
+        });
+        return response;
+    } catch (error) {
+        return error;
+    }
+}
