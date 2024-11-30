@@ -2,7 +2,7 @@ import React, { useState, useEffect } from 'react'
 import { Button } from 'primereact/button'
 import { InputText } from 'primereact/inputtext'
 import { Password } from 'primereact/password'
-import { validMail, login as LG, sendMessage } from '../utils/useMethods'
+import { validMail, login as LG, sendMessage, loginMethod } from '../utils/useMethods'
 import { useNavigate } from 'react-router-dom'
 import img from '../../assets/prueba.png'
 
@@ -27,13 +27,15 @@ function Login({reload}) {
     }, [email, password])
 
     const startLogin = async (e) => {
-        sendMessage('load', 0)
         e.preventDefault()
+        sendMessage('load', 0)
         const data = {
             usuario: email,
             contrasenia: password
         }    
-        const start = await LG({data, reload, navigate});
+        const start = await LG({data});
+        start ? sendMessage(200, 0) : null
+        start ? loginMethod({newData: start, reload, navigate}) : sendMessage(400, 0)
         
     }
 

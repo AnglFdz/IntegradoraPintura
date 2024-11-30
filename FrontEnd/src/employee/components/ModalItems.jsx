@@ -4,12 +4,39 @@ import { Button } from 'primereact/button';
 import { Dialog } from 'primereact/dialog';
 import { InputText } from "primereact/inputtext";
 import { InputTextarea } from "primereact/inputtextarea";
+import { setProduct } from "../../access-control/utils/useMethods";
         
 
-function ModalItems(props){
-    const {text} = props;
+function ModalItems({text, product}){
     const [visible, setVisible] = useState(false);
     const [showText, setShowText] = useState(text);
+    const [name, setName] = useState(product ? product.nombre : '');
+    const [description, setDescription] = useState(product ? product.descripcion : '');
+    const [price, setPrice] = useState(product ? product.precio : '');
+    const [stock, setStock] = useState(product ? product.stock : '');
+    const [image, setImage] = useState(product ? product.imagen : '');
+    const [update, setUpdate] = useState(false);
+
+
+    const saveProduct = async () => {
+        const data = {
+            nombre: name,
+            descripcion: description,
+            precio: price,
+            stock: stock,
+            imagen: null
+        }
+        await setProduct({data});
+        setVisible(false);
+    }
+
+    const updateInfo =  () => {
+        setUpdate(!update);
+    }
+
+    React.useEffect(() => {
+        
+    }, [update]);
     const styleInputsTexts = 'w-full'
 
     return (
@@ -25,19 +52,23 @@ function ModalItems(props){
                     </div>
                     <div className="col-6">
                         <h3>Nombre</h3>
-                        <InputText placeholder='Ingrese el precio del producto' className={styleInputsTexts} onChange={(e) => {}} />
+                        <InputText placeholder='Ingrese el precio del producto' className={styleInputsTexts} value={name} onChange={(e) => {setName(e.target.value)}} />
                         <h3>Descripción</h3>
-                        <InputTextarea placeholder='Ingrese la descripción del producto' className={styleInputsTexts} onChange={(e) => {}} />
+                        <InputTextarea placeholder='Ingrese la descripción del producto' className={styleInputsTexts} value={description} onChange={(e) => {setDescription(e.target.value)}} />
                     </div>
                     <div className="col-6">
                         <h3>Precio</h3>
-                        <InputText keyfilter={"num"} placeholder='Ingrese el precio del producto' className={styleInputsTexts} onChange={(e) => {}} />
+                        <InputText keyfilter={"num"} placeholder='Ingrese el precio del producto' className={styleInputsTexts} value={price} onChange={(e) => {setPrice(e.target.value)}} />
                         <h3>Stock</h3>
-                        <InputText keyfilter={"num"} placeholder='Ingrese el stock del producto' className={styleInputsTexts} onChange={(e) => {}} />
+                        <InputText keyfilter={"num"} placeholder='Ingrese el stock del producto' className={styleInputsTexts} value={stock} onChange={(e) => {setStock(e.target.value)}} />
+                    </div>
+                    <div className="col-12">
+                        <h3>Imagen</h3>
+                        <InputText type="file" placeholder='Ingrese la url de la imagen' className={styleInputsTexts} value={image} onChange={(e) => {setImage(e.target.value)}} />
                     </div>
                     <div className="grid flex justify-content-end w-full">
                         <Button label="Cancelar" className="p-button-danger" onClick={() => setVisible(false)} />
-                        <Button label="Guardar" className="p-button-success" onClick={() => setVisible(false)} />
+                        <Button label="Guardar" className="p-button-success" onClick={() => saveProduct()} />
                     </div>
                 </div>
             </Dialog>

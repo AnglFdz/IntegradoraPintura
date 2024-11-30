@@ -31,7 +31,7 @@ public class ProductoBean {
     @Column(name = "descripcion", nullable = false)
     private String descripcion;
 
-    @Column(name = "imagen", nullable = false)  // Corregido aquí
+    @Column(name = "imagen", nullable = true)  // Corregido aquí
     private byte[] imagen;
 
     // Relación Many-to-Many con Venta

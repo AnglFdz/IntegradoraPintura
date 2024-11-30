@@ -1,7 +1,7 @@
 import axios from "axios";
 
 const apiManager = axios.create({
-    baseURL: `http://localhost:5174/api`,
+    baseURL: `http://localhost:8000/api`,
     responseType: "json",
     allowCredentials: false,
     headers: {

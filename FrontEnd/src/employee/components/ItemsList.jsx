@@ -2,367 +2,64 @@ import React, { useState, useEffect } from 'react';
 import { Button } from 'primereact/button';
 import { DataTable } from 'primereact/datatable';
 import { Column } from 'primereact/column';
+import { getProducts, eliminateProduct } from '../../access-control/utils/useMethods';
 import ModalItems from './ModalItems';
 
-function ItemsList(props) {
-    const { page } = props;
+function ItemsList({page, products}) {
 
-    const [customers, setCustomers] = useState([
-        {
-            id: 1000,
-            name: 'James Butt',
-            country: {
-                name: 'Algeria',
-                code: 'dz'
-            },
-            company: 'Benton, John B Jr',
-            date: '2015-09-13',
-            status: 'unqualified',
-            verified: true,
-            activity: 17,
-            representative: {
-                name: 'Ioni Bowcher',
-                image: 'ionibowcher.png'
-            },
-            balance: 70663
-        }, {
-            id: 1000,
-            name: 'James Butt',
-            country: {
-                name: 'Algeria',
-                code: 'dz'
-            },
-            company: 'Benton, John B Jr',
-            date: '2015-09-13',
-            status: 'unqualified',
-            verified: true,
-            activity: 17,
-            representative: {
-                name: 'Ioni Bowcher',
-                image: 'ionibowcher.png'
-            },
-            balance: 70663
-        }, {
-            id: 1000,
-            name: 'James Butt',
-            country: {
-                name: 'Algeria',
-                code: 'dz'
-            },
-            company: 'Benton, John B Jr',
-            date: '2015-09-13',
-            status: 'unqualified',
-            verified: true,
-            activity: 17,
-            representative: {
-                name: 'Ioni Bowcher',
-                image: 'ionibowcher.png'
-            },
-            balance: 70663
-        }, {
-            id: 1000,
-            name: 'James Butt',
-            country: {
-                name: 'Algeria',
-                code: 'dz'
-            },
-            company: 'Benton, John B Jr',
-            date: '2015-09-13',
-            status: 'unqualified',
-            verified: true,
-            activity: 17,
-            representative: {
-                name: 'Ioni Bowcher',
-                image: 'ionibowcher.png'
-            },
-            balance: 70663
-        }, {
-            id: 1000,
-            name: 'James Butt',
-            country: {
-                name: 'Algeria',
-                code: 'dz'
-            },
-            company: 'Benton, John B Jr',
-            date: '2015-09-13',
-            status: 'unqualified',
-            verified: true,
-            activity: 17,
-            representative: {
-                name: 'Ioni Bowcher',
-                image: 'ionibowcher.png'
-            },
-            balance: 70663
-        }, {
-            id: 1000,
-            name: 'James Butt',
-            country: {
-                name: 'Algeria',
-                code: 'dz'
-            },
-            company: 'Benton, John B Jr',
-            date: '2015-09-13',
-            status: 'unqualified',
-            verified: true,
-            activity: 17,
-            representative: {
-                name: 'Ioni Bowcher',
-                image: 'ionibowcher.png'
-            },
-            balance: 70663
-        }, {
-            id: 1000,
-            name: 'James Butt',
-            country: {
-                name: 'Algeria',
-                code: 'dz'
-            },
-            company: 'Benton, John B Jr',
-            date: '2015-09-13',
-            status: 'unqualified',
-            verified: true,
-            activity: 17,
-            representative: {
-                name: 'Ioni Bowcher',
-                image: 'ionibowcher.png'
-            },
-            balance: 70663
-        }, {
-            id: 1000,
-            name: 'James Butt',
-            country: {
-                name: 'Algeria',
-                code: 'dz'
-            },
-            company: 'Benton, John B Jr',
-            date: '2015-09-13',
-            status: 'unqualified',
-            verified: true,
-            activity: 17,
-            representative: {
-                name: 'Ioni Bowcher',
-                image: 'ionibowcher.png'
-            },
-            balance: 70663
-        }, {
-            id: 1000,
-            name: 'James Butt',
-            country: {
-                name: 'Algeria',
-                code: 'dz'
-            },
-            company: 'Benton, John B Jr',
-            date: '2015-09-13',
-            status: 'unqualified',
-            verified: true,
-            activity: 17,
-            representative: {
-                name: 'Ioni Bowcher',
-                image: 'ionibowcher.png'
-            },
-            balance: 70663
-        }, {
-            id: 1000,
-            name: 'James Butt',
-            country: {
-                name: 'Algeria',
-                code: 'dz'
-            },
-            company: 'Benton, John B Jr',
-            date: '2015-09-13',
-            status: 'unqualified',
-            verified: true,
-            activity: 17,
-            representative: {
-                name: 'Ioni Bowcher',
-                image: 'ionibowcher.png'
-            },
-            balance: 70663
-        }, {
-            id: 1000,
-            name: 'James Butt',
-            country: {
-                name: 'Algeria',
-                code: 'dz'
-            },
-            company: 'Benton, John B Jr',
-            date: '2015-09-13',
-            status: 'unqualified',
-            verified: true,
-            activity: 17,
-            representative: {
-                name: 'Ioni Bowcher',
-                image: 'ionibowcher.png'
-            },
-            balance: 70663
-        }, {
-            id: 1000,
-            name: 'James Butt',
-            country: {
-                name: 'Algeria',
-                code: 'dz'
-            },
-            company: 'Benton, John B Jr',
-            date: '2015-09-13',
-            status: 'unqualified',
-            verified: true,
-            activity: 17,
-            representative: {
-                name: 'Ioni Bowcher',
-                image: 'ionibowcher.png'
-            },
-            balance: 70663
-        }, {
-            id: 1000,
-            name: 'James Butt',
-            country: {
-                name: 'Algeria',
-                code: 'dz'
-            },
-            company: 'Benton, John B Jr',
-            date: '2015-09-13',
-            status: 'unqualified',
-            verified: true,
-            activity: 17,
-            representative: {
-                name: 'Ioni Bowcher',
-                image: 'ionibowcher.png'
-            },
-            balance: 70663
-        }, {
-            id: 1000,
-            name: 'James Butt',
-            country: {
-                name: 'Algeria',
-                code: 'dz'
-            },
-            company: 'Benton, John B Jr',
-            date: '2015-09-13',
-            status: 'unqualified',
-            verified: true,
-            activity: 17,
-            representative: {
-                name: 'Ioni Bowcher',
-                image: 'ionibowcher.png'
-            },
-            balance: 70663
-        }, {
-            id: 1000,
-            name: 'James Butt',
-            country: {
-                name: 'Algeria',
-                code: 'dz'
-            },
-            company: 'Benton, John B Jr',
-            date: '2015-09-13',
-            status: 'unqualified',
-            verified: true,
-            activity: 17,
-            representative: {
-                name: 'Ioni Bowcher',
-                image: 'ionibowcher.png'
-            },
-            balance: 70663
-        }, {
-            id: 1000,
-            name: 'James Butt',
-            country: {
-                name: 'Algeria',
-                code: 'dz'
-            },
-            company: 'Benton, John B Jr',
-            date: '2015-09-13',
-            status: 'unqualified',
-            verified: true,
-            activity: 17,
-            representative: {
-                name: 'Ioni Bowcher',
-                image: 'ionibowcher.png'
-            },
-            balance: 70663
-        }, {
-            id: 1000,
-            name: 'James Butt',
-            country: {
-                name: 'Algeria',
-                code: 'dz'
-            },
-            company: 'Benton, John B Jr',
-            date: '2015-09-13',
-            status: 'unqualified',
-            verified: true,
-            activity: 17,
-            representative: {
-                name: 'Ioni Bowcher',
-                image: 'ionibowcher.png'
-            },
-            balance: 70663
-        }, {
-            id: 1000,
-            name: 'James Butt',
-            country: {
-                name: 'Algeria',
-                code: 'dz'
-            },
-            company: 'Benton, John B Jr',
-            date: '2015-09-13',
-            status: 'unqualified',
-            verified: true,
-            activity: 17,
-            representative: {
-                name: 'Ioni Bowcher',
-                image: 'ionibowcher.png'
-            },
-            balance: 70663
-        }, {
-            id: 1000,
-            name: 'James Butt',
-            country: {
-                name: 'Algeria',
-                code: 'dz'
-            },
-            company: 'Benton, John B Jr',
-            date: '2015-09-13',
-            status: 'unqualified',
-            verified: true,
-            activity: 17,
-            representative: {
-                name: 'Ioni Bowcher',
-                image: 'ionibowcher.png'
-            },
-            balance: 70663
-        },
-    ]);
+    const [productos, setProductos] = useState([]);
     const [pageLoad, setPageLoad] = useState(page);
+    const [isMounted, setIsMounted] = useState(false);
+    const [reload, setReload] = useState(false);
 
-    const button = () => {
+    const obtenerProductos = async () => {
+        const response = await getProducts();
+        setProductos(response);
+    }
+
+    const agregarCarrito = (product) => {
+        products(product);
+    }
+
+    const deleteProduct = async (product) =>  {
+       await eliminateProduct({data: product});
+       setReload(!reload)
+    }
+
+    useEffect(() => {
+        setIsMounted(true);
+    }, []);
+    useEffect(() => {
+        obtenerProductos();
+    }, [isMounted, reload]);
+
+    const button = (data) => {
         return (
             <>
-                    {pageLoad === 'employee' ?
+                {pageLoad === 'employee' ?
                     <div>
-                     <button className='mr-3'>Agregar</button>
-                     </div> 
-                     : pageLoad === 'employee/items' || pageLoad === 'admin' ?
+                        <button onClick={()=>agregarCarrito(data)} className='mr-3'>Agregar</button>
+                    </div>
+                    : pageLoad === 'employee/items' || pageLoad === 'admin' ?
                         <div className='grid'>
-                        <ModalItems />
-                <Button
-                    icon="pi pi-trash"
-                    className="p-button p-button-danger ml-3"
-                    onClick={() => deleteProduct(rowData)}/>
+                            <ModalItems product={data} />
+                            <Button
+                                icon="pi pi-trash"
+                                className="p-button p-button-danger ml-3"
+                                onClick={() => deleteProduct(data.id_producto)} />
                         </div> : null
-                        }
+                }
             </>
         )
     }
     return (
         <>
-
-            <DataTable value={customers} scrollable scrollHeight="40rem" tableStyle={{ minWidth: '50rem' }}>
-                <Column field="name" header="Name" ></Column>
-                <Column field="country.name" header="Country"></Column>
-                <Column field="company" header="Company"></Column>
-                <Column field="company" header="Other"></Column>
-                <Column field="company" header="other2"></Column>
+            <DataTable value={productos} scrollable scrollHeight="40rem" tableStyle={{ minWidth: '50rem' }}>
+                <Column field="id_producto" header="ID" ></Column>
+                <Column field="nombre" header="Nombre"></Column>
+                <Column field="precio" header="Precio"></Column>
+                <Column field="stock" header="Unidades"></Column>
+                <Column field="imagen" header="Imagen"></Column>
                 <Column field={button} header="Representative"></Column>
             </DataTable>
         </>
