@@ -1,5 +1,6 @@
 package utez.edu.mx.IntPinturaAPI.security.service;
 
+import org.springframework.context.annotation.Lazy;
 import utez.edu.mx.IntPinturaAPI.models.entity.UsuarioBean;
 import utez.edu.mx.IntPinturaAPI.security.entity.UserDetailsImpl;
 import utez.edu.mx.IntPinturaAPI.services.UsuarioService;
@@ -14,11 +15,14 @@ import java.util.Optional;
 @Service
 @Transactional
 public class UserDetailsServiceImpl implements UserDetailsService {
+
+    @Lazy
     private final UsuarioService service;
 
-    public UserDetailsServiceImpl(UsuarioService service) {
+    public UserDetailsServiceImpl(@Lazy UsuarioService service) {
         this.service = service;
     }
+
     @Override
     @Transactional(readOnly = true)
     public UserDetails loadUserByUsername(String usuario) throws UsernameNotFoundException {
@@ -28,3 +32,4 @@ public class UserDetailsServiceImpl implements UserDetailsService {
         throw new UsernameNotFoundException("UserNotFound");
     }
 }
+

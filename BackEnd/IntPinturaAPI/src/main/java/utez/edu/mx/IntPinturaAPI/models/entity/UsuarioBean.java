@@ -37,7 +37,7 @@ public class UsuarioBean {
 
     @Column(columnDefinition = "BOOL DEFAULT true")
     private Boolean status;
-    @Column(columnDefinition = "BOOL DEFAULT true")
+    @Column(columnDefinition = "BOOL DEFAULT false")
     private Boolean blocked;
 
 

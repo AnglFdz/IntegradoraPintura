@@ -26,17 +26,19 @@ public class UserDetailsImpl implements UserDetails {
 
     public static UserDetailsImpl build(UsuarioBean user) {
         if (user.getRole() == null || user.getRole().getNombre() == null) {
-            throw new IllegalArgumentException("El usuario no tiene un rol asignado.");
+            throw new IllegalArgumentException("El usuario no tiene un rol válido asignado: " + user.getEmail());
         }
+
         GrantedAuthority authority = new SimpleGrantedAuthority(user.getRole().getNombre());
         return new UserDetailsImpl(
                 user.getEmail(),
                 user.getContrasena(),
-                user.getBlocked(), // Inversión lógica se maneja directamente aquí
-                user.getStatus(),
+                user.getBlocked() != null ? user.getBlocked() : false,
+                user.getStatus() != null ? user.getStatus() : true,
                 Collections.singleton(authority)
         );
     }
+
 
     @Override
     public Collection<? extends GrantedAuthority> getAuthorities() {

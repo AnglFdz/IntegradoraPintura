@@ -1,6 +1,7 @@
 package utez.edu.mx.IntPinturaAPI.config;
 
 import lombok.RequiredArgsConstructor;
+import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.boot.CommandLineRunner;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.core.annotation.Order;
@@ -20,6 +21,7 @@ public class InitialConfig implements CommandLineRunner {
 
     private final RoleDao roleRepository;
     private final UsuarioDao usuarioRepository;
+
     private final PasswordEncoder encoder;
 
     @Override

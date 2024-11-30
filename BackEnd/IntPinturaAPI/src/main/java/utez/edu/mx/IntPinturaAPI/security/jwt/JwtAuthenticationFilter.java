@@ -29,29 +29,26 @@ public class JwtAuthenticationFilter extends OncePerRequestFilter {
     protected void doFilterInternal(HttpServletRequest request, HttpServletResponse response, FilterChain filterChain)
             throws ServletException, IOException {
         try {
-            // Verificar si ya hay un usuario autenticado en el contexto de seguridad
-            if (SecurityContextHolder.getContext().getAuthentication() == null) {
-                // Resolver el token desde la solicitud
-                String token = provider.resolveToken(request);
-                if (token != null && provider.validateToken(token)) {
-                    Claims claims = provider.getClaims(token);
-                    String username = claims.getSubject();
+            String token = provider.resolveToken(request);
+            if (token != null && provider.validateToken(token)) {
+                Claims claims = provider.getClaims(token);
+                String username = claims.getSubject();
 
-                    // Cargar detalles del usuario
-                    UserDetails user = service.loadUserByUsername(username);
+                UserDetails user = service.loadUserByUsername(username);
+                Authentication auth = new UsernamePasswordAuthenticationToken(user, null, user.getAuthorities());
+                SecurityContextHolder.getContext().setAuthentication(auth);
 
-                    // Configurar el contexto de seguridad
-                    Authentication auth = new UsernamePasswordAuthenticationToken(
-                            user, null, user.getAuthorities());
-                    SecurityContextHolder.getContext().setAuthentication(auth);
-                }
+                System.out.println("Autenticación exitosa para el usuario: " + username);
+            } else {
+                System.out.println("No se encontró un token válido en la solicitud.");
             }
         } catch (Exception e) {
-            // Manejo de errores: log y respuesta al cliente
-            System.err.println("Error en la autenticación JWT: " + e.getMessage());
-            response.sendError(HttpServletResponse.SC_UNAUTHORIZED, "No autorizado");
+            System.err.println("Error durante la autenticación JWT: " + e.getMessage());
+            response.sendError(HttpServletResponse.SC_UNAUTHORIZED, "Error en la autenticación: " + e.getMessage());
             return;
         }
-        filterChain.doFilter(request, response); // Continuar con la cadena de filtros
+
+        filterChain.doFilter(request, response);
     }
+
 }
