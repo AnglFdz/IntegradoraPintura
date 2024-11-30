@@ -26,7 +26,7 @@ const Cart = (props) => {
   };
 
   const total = cartItems.reduce(
-    (sum, item) => sum + item.cantidad * item.price,
+    (sum, item) => sum + item.cantidad * item.precio,
     0
   );
 
@@ -53,11 +53,11 @@ const Cart = (props) => {
                   <img src={item.image} alt="Placeholder" className="border-round" style={{ width: '150px', height: '150px', objectFit: 'cover', }} />
                   <div className="flex md:justify-content-between align-items-center flex-grow-1">
                     <div>
-                    <h2 className="text-xl font-bold my-2 text-5xl font-bold">{item.title}</h2>
-                    <p className="text-secondary" >This is a description inside the card. You can add more details here.</p>
+                    <h2 className="text-xl font-bold my-2 text-5xl font-bold">{item.nombre}</h2>
+                    <p className="text-secondary">{item.descripcion}.</p>
                     </div>
                     <div>
-                      <p className="text-secondary my-2 text-md italic text-primary-700">Precio unitario: ${item.price.toFixed(2)}</p>
+                      <p className="text-secondary my-2 text-md italic text-primary-700">Precio unitario: ${item.precio.toFixed(2)}</p>
                       <p className="text-secondary my-2 text-md italic text-primary-700">Stock disponible: {item.stock}</p>
                     </div>
                     <InputNumber inputId="stacked-buttons" value={item.cantidad} onValueChange={(e) => calculoPrecio(e.value, index)} showButtons min={1} max={item.stock} />

@@ -60,24 +60,16 @@ public class JwtProvider {
     // Validar un token JWT
     public boolean validateToken(String token) {
         try {
-            Jwts.parserBuilder()
-                    .setSigningKey(getSignKey())
-                    .build()
-                    .parseClaimsJws(token);
+            getClaims(token);
             return true;
         } catch (ExpiredJwtException e) {
-            System.out.println("Token expirado: " + e.getMessage());
-        } catch (UnsupportedJwtException e) {
-            System.out.println("Token no soportado: " + e.getMessage());
-        } catch (MalformedJwtException e) {
-            System.out.println("Token malformado: " + e.getMessage());
-        } catch (SignatureException e) {
-            System.out.println("Fallo en la firma del token: " + e.getMessage());
-        } catch (IllegalArgumentException e) {
-            System.out.println("Token vacío o nulo: " + e.getMessage());
+            System.err.println("El token ha expirado: " + e.getMessage());
+        } catch (MalformedJwtException | UnsupportedJwtException | IllegalArgumentException e) {
+            System.err.println("Token inválido: " + e.getMessage());
         }
         return false;
     }
+
 
     // Extraer claims del token
     public Claims getClaims(String token) {

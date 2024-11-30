@@ -1,9 +1,10 @@
-import React, { useState } from "react";
+import React, { useState,useEffect } from "react";
 import { Menubar } from "primereact/menubar";
 import { Button } from "primereact/button";
 import CardPrime from "./components/Card";
 import Cart from "./components/Cart";
 import "primeicons/primeicons.css";
+import { getProducts } from "../access-control/utils/useMethods";
 
 const Catalogue = () => {
   const [isVisible, setIsVisible] = useState(false);
@@ -11,7 +12,23 @@ const Catalogue = () => {
   const [cartCount, setCartCount] = useState(0);
   const [activated, setActivated] = useState(false);
   const [cartItems, setCartItems] = useState([]);
+  const [products, setProducts] = useState([]);
 
+  useEffect(() => {
+    const fetchProducts = async () => {
+      try {
+        const productsData = await getProducts();
+        if (productsData) {
+          setProducts(productsData);  
+        } else {
+          setError("No se pudieron cargar los productos");  
+        }
+      } catch (error) { 
+        console.log(error)
+      }  
+    };
+    fetchProducts();  
+  }, []);
   const items = [
     {
       label: "Catalogo",
@@ -80,72 +97,6 @@ const Catalogue = () => {
       },
     },
   ];
-  const cardData = [
-    {
-      id: 1,
-      title: "Card 1",
-      description: "This is the first card.",
-      image: "https://i.pinimg.com/736x/91/3b/b5/913bb5ba246e0f4ae2a7e7b97aecb7e2.jpg",
-      stock: 12,
-      price: 100
-    },
-    {
-      id: 2,
-      title: "Card 2",
-      description: "This is the second card.",
-      image: "https://i.pinimg.com/736x/15/da/f5/15daf568c0f4f004c9847203800eeadf.jpg",
-      stock: 12,
-      price: 100
-    },
-    {
-      id: 3,
-      title: "Card 3",
-      description: "This is the third card.",
-      image: "https://i.pinimg.com/736x/06/35/19/0635199fc09754bea87dbbc15722e901.jpg",
-      stock: 12,
-      price: 100
-    },
-    {
-      id: 4,
-      title: "Card 4",
-      description: "This is the forth card.",
-      image: "https://i.pinimg.com/736x/88/d1/1a/88d11a31a1ecd5e3bc04dcdaa02b2e24.jpg",
-      stock: 12,
-      price: 100
-    },
-    {
-      id: 1,
-      title: "Card 1",
-      description: "This is the first card.",
-      image: "https://i.pinimg.com/736x/d0/e1/bf/d0e1bf9b7859f421460969b33c73686b.jpg",
-      stock: 12,
-      price: 100
-    },
-    {
-      id: 2,
-      title: "Card 2",
-      description: "This is the second card.",
-      image: "https://i.pinimg.com/736x/97/49/98/974998cc07764ba374fbe3ada03345ab.jpg",
-      stock: 12,
-      price: 100
-    },
-    {
-      id: 3,
-      title: "Card 3",
-      description: "This is the third card.",
-      image: "https://i.pinimg.com/736x/36/e0/67/36e06701e26a017496fc1009cf24d92b.jpg",
-      stock: 12,
-      price: 100
-    },
-    {
-      id: 4,
-      title: "Card 4",
-      description: "This is the forth card.",
-      image: "https://i.pinimg.com/736x/f1/75/24/f17524202ca5612c81c2c7304389a1d1.jpg",
-      stock: 0,
-      price: 100
-    },
-  ];
   const endElement = <Button label="" icon="pi pi-sign-out" className="p-button-secondary" style={{ backgroundColor: 'var(--primary-300)', borderColor: 'var(--primary-300)', color: 'var(--surface-0)', }} />;
 
   const cart_items = []
@@ -163,13 +114,14 @@ const Catalogue = () => {
       <Menubar model={items} end={endElement} className="my-2" style={{ backgroundColor: 'var(--primary-300)', color: 'var(--primary-color-text)', items: 'var(--surface-0)' }} />
       {/* Cards */}
       <div className={isInVisible ? 'grid' : 'hidden'}>
-        {cardData.map((card) => (
-          <div key={card.id} className="col-12 flex align-items-center justify-content-center md:col-6 lg:col-3 ">
+        {products.map((card) => (
+          <div key={card.id_producto} className="col-12 flex align-items-center justify-content-center md:col-6 lg:col-3 ">
             <CardPrime
-              title={card.title}
-              description={card.description}
-              image={card.image}
+              title={card.nombre}
+              description={card.descripcion}
+              image={card.imagen}
               stock={card.stock}
+
               onAction={() => insert_items_cart(card)}
             />
           </div>

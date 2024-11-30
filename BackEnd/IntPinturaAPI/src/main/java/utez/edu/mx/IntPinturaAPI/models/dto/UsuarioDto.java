@@ -31,7 +31,7 @@ public class UsuarioDto {
         this.ap2 = usuarioEntity.getAp2();
         this.email = usuarioEntity.getEmail();
         this.contrasena = usuarioEntity.getContrasena();
-        this.role = usuarioEntity.getRole(); // Obtiene el rol asignado
+        this.role = usuarioEntity.getRole();
     }
 
     // Método para convertir el DTO en una entidad UsuarioBean

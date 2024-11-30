@@ -1,8 +1,11 @@
 package utez.edu.mx.IntPinturaAPI.services.auth;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.authentication.AuthenticationManager;
+import org.springframework.security.authentication.BadCredentialsException;
 import org.springframework.security.authentication.DisabledException;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.Authentication;
@@ -21,12 +24,15 @@ import java.util.Optional;
 @Service
 @Transactional
 public class AuthService {
-    private final UsuarioService Service;
+
+    private static final Logger logger = LoggerFactory.getLogger(AuthService.class);
+
+    private final UsuarioService service;
     private final AuthenticationManager manager;
     private final JwtProvider provider;
 
     public AuthService(UsuarioService service, AuthenticationManager manager, JwtProvider provider) {
-        Service = service;
+        this.service = service;
         this.manager = manager;
         this.provider = provider;
     }
@@ -34,47 +40,73 @@ public class AuthService {
     @Transactional(readOnly = true)
     public ResponseEntity<ApiResponse> signIn(String usuario, String contrasenia) {
         try {
+            logger.info("Iniciando proceso de autenticación para el usuario: {}", usuario);
 
-            Optional<UsuarioBean> foundUsuario = Service.findByMail(usuario);
-            if (foundUsuario.isEmpty())
+            Optional<UsuarioBean> foundUsuario = service.findByMail(usuario);
+            if (foundUsuario.isEmpty()) {
+                logger.warn("Usuario no encontrado: {}", usuario);
                 return new ResponseEntity<>(
                         new ApiResponse(HttpStatus.NOT_FOUND, true, "Usuario no encontrado"),
-                        HttpStatus.BAD_REQUEST);
+                        HttpStatus.NOT_FOUND
+                );
+            }
 
             UsuarioBean user = foundUsuario.get();
-            if (!user.getStatus())
+            logger.info("Usuario encontrado: {}", user.getEmail());
+
+            if (!user.getStatus()) {
+                logger.warn("El usuario está inactivo: {}", user.getEmail());
                 return new ResponseEntity<>(
                         new ApiResponse(HttpStatus.UNAUTHORIZED, true, "Inactivo"),
-                        HttpStatus.BAD_REQUEST);
+                        HttpStatus.UNAUTHORIZED
+                );
+            }
 
-            if (user.getBlocked())
+            if (user.getBlocked()) {
+                logger.warn("El usuario está bloqueado: {}", user.getEmail());
                 return new ResponseEntity<>(
                         new ApiResponse(HttpStatus.UNAUTHORIZED, true, "Bloqueado"),
-                        HttpStatus.BAD_REQUEST);
+                        HttpStatus.UNAUTHORIZED
+                );
+            }
 
+            logger.info("Autenticando credenciales para el usuario: {}", usuario);
             Authentication auth = manager.authenticate(
                     new UsernamePasswordAuthenticationToken(usuario, contrasenia)
             );
             SecurityContextHolder.getContext().setAuthentication(auth);
+
+            logger.info("Generando token JWT para el usuario: {}", usuario);
             String token = provider.generateToken(auth);
 
             UsuarioDto usuarioDto = new UsuarioDto(user);
 
             SignedDto signedDto = new SignedDto(token, "Bearer", usuarioDto, null);
+            logger.info("Autenticación exitosa para el usuario: {}", usuario);
+
             return new ResponseEntity<>(
                     new ApiResponse(signedDto, HttpStatus.OK),
-                    HttpStatus.OK);
+                    HttpStatus.OK
+            );
 
-        } catch (Exception e) {
-            String mensaje = "Las credenciales no coinciden";
-            if (e instanceof DisabledException) {
-                mensaje = "Usuario desactivado";
-            }
+        } catch (BadCredentialsException e) {
+            logger.error("Credenciales incorrectas para el usuario: {}", usuario);
             return new ResponseEntity<>(
-                    new ApiResponse(HttpStatus.BAD_REQUEST, true, mensaje),
-                    HttpStatus.BAD_REQUEST);
+                    new ApiResponse(HttpStatus.BAD_REQUEST, true, "Las credenciales no coinciden"),
+                    HttpStatus.BAD_REQUEST
+            );
+        } catch (DisabledException e) {
+            logger.error("El usuario está deshabilitado: {}", usuario);
+            return new ResponseEntity<>(
+                    new ApiResponse(HttpStatus.UNAUTHORIZED, true, "Usuario desactivado"),
+                    HttpStatus.UNAUTHORIZED
+            );
+        } catch (Exception e) {
+            logger.error("Error inesperado durante el inicio de sesión para el usuario: {}", usuario, e);
+            return new ResponseEntity<>(
+                    new ApiResponse(HttpStatus.INTERNAL_SERVER_ERROR, true, "Error interno en el servidor"),
+                    HttpStatus.INTERNAL_SERVER_ERROR
+            );
         }
     }
-
-
 }
