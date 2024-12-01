@@ -2,10 +2,13 @@ package utez.edu.mx.IntPinturaAPI.services;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.springframework.web.multipart.MultipartFile;
 import utez.edu.mx.IntPinturaAPI.models.dao.ProductoDao;
 import utez.edu.mx.IntPinturaAPI.models.dto.ProductoDto;
 import utez.edu.mx.IntPinturaAPI.models.entity.ProductoBean;
 
+import java.io.IOException;
+import java.util.Arrays;
 import java.util.List;
 import java.util.Optional;
 import java.util.stream.Collectors;
@@ -29,14 +32,33 @@ public class ProductoService {
     }
 
     // Crear producto
-    public ProductoDto createProducto(ProductoDto productoDto) {
-        ProductoBean producto = productoDto.toEntity();
-        ProductoBean savedProducto = productoRepository.save(producto);
-        return toDTO(savedProducto);
+    public ProductoDto createProducto(ProductoDto productoDto, MultipartFile imagen) {
+        try {
+            ProductoBean producto = productoDto.toEntity();
+
+            if (imagen != null && !imagen.isEmpty()) {
+                System.out.println("Imagen recibida: " + imagen.getOriginalFilename());
+                byte[] imageBytes = imagen.getBytes();
+                producto.setImagen(imageBytes);
+                System.out.println("Bytes de la imagen: " + imageBytes.length);
+            } else {
+                System.out.println("No se recibió una imagen válida.");
+            }
+
+            ProductoBean savedProducto = productoRepository.save(producto);
+
+
+            System.out.println("Imagen guardada en la base de datos: " +
+                    (savedProducto.getImagen() != null ? savedProducto.getImagen().length : "null"));
+
+            return toDTO(savedProducto);
+        } catch (IOException e) {
+            throw new RuntimeException("Error al procesar la imagen", e);
+        }
     }
 
-    // Actualizar producto
-    public Optional<ProductoDto> updateProducto(Integer id, ProductoDto productoDto) {
+
+    public Optional<ProductoDto> updateProducto(Integer id, ProductoDto productoDto, MultipartFile imagen) {
         Optional<ProductoBean> existingProducto = productoRepository.findById(id);
         if (existingProducto.isPresent()) {
             ProductoBean producto = existingProducto.get();
@@ -45,12 +67,21 @@ public class ProductoService {
             producto.setPrecio(productoDto.getPrecio());
             producto.setDescripcion(productoDto.getDescripcion());
             producto.setCategoria(productoDto.getCategoria());
-            producto.setImagen(productoDto.getImagen());
+
+            try {
+                if (imagen != null && !imagen.isEmpty()) {
+                    producto.setImagen(imagen.getBytes()); // Actualizar la imagen si se proporciona
+                }
+            } catch (IOException e) {
+                throw new RuntimeException("Error al procesar la imagen", e);
+            }
+
             ProductoBean updatedProducto = productoRepository.save(producto);
             return Optional.of(toDTO(updatedProducto));
         }
         return Optional.empty();
     }
+
 
     // Eliminar producto
     public void deleteProducto(Integer id) {
@@ -59,14 +90,7 @@ public class ProductoService {
 
     // Convertir de ProductoBean a ProductoDTO
     private ProductoDto toDTO(ProductoBean producto) {
-        return ProductoDto.builder()
-                .id_producto(producto.getId_producto())
-                .nombre(producto.getNombre())
-                .stock(producto.getStock())
-                .precio(producto.getPrecio())
-                .descripcion(producto.getDescripcion())
-                .categoria(producto.getCategoria())
-                .imagen(producto.getImagen())
-                .build();
+        return ProductoDto.fromEntity(producto);
     }
+
 }

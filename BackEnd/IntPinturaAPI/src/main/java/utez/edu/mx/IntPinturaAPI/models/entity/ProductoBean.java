@@ -13,7 +13,6 @@ import java.util.Set;
 @Builder
 @Table(name = "producto")
 public class ProductoBean {
-    // Método adicional para obtener el ID del producto
     @Getter
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -34,12 +33,12 @@ public class ProductoBean {
     @Column(name = "categoria", nullable = false)
     private String categoria;
 
-    @Column(name = "imagen", nullable = false)  // Corregido aquí
+    @Lob
+    @Column( columnDefinition = "Longblob")
     private byte[] imagen;
 
-    // Relación Many-to-Many con Venta
     @ManyToMany(mappedBy = "productos")
-    @JsonIgnore // Evita la serialización cíclica
+    @JsonIgnore
     private Set<VentaBean> ventas;
 
 }

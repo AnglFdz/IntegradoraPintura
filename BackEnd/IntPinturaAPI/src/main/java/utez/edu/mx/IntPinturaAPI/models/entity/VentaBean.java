@@ -31,7 +31,7 @@ public class VentaBean {
     private UsuarioBean usuario;
 
     @ManyToOne
-    @JoinColumn(name = "id_pedido", nullable = false)
+    @JoinColumn(name = "id_pedido", nullable = true)
     private PedidoBean pedido;
 
     @ManyToMany

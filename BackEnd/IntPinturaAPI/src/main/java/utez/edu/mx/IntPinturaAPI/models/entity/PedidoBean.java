@@ -31,7 +31,6 @@ public class PedidoBean {
     @JoinColumn(name = "id_usuario")
     private UsuarioBean usuario;
 
-    // Relación Many-to-One con Role (asegurándote de que el objeto 'role' está correctamente definido)
     @ManyToOne
     @JoinColumn(name = "id_role")
     private RoleBean role;

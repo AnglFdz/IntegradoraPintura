@@ -6,20 +6,18 @@ import lombok.Data;
 import lombok.NoArgsConstructor;
 
 import java.util.List;
-import java.util.Set;
 
 @Data
 @Builder
 @AllArgsConstructor
 @NoArgsConstructor
-public class VentaDto {
+public class VentaDetalleDto {
     private Integer id_venta;
     private Integer cantidad;
     private Double total;
     private String fechaVenta;
     private Integer id_usuario;
     private Integer id_pedido;
-    private List<Integer> productos;
+    private List<ProductoDto> productos;
 }
-
 
