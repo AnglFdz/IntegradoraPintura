@@ -36,24 +36,18 @@ public class PedidoController {
 
     // Obtener pedido por número de identificador
     @GetMapping("/identificador/{num_identificador}")
-    public ResponseEntity<ApiResponse> getPedidoByNumIdentificador(@PathVariable String numidentificador) {
-        Optional<PedidoDto> pedidoDto = pedidoService.getPedidoByNumIdentificador(numidentificador);
+    public ResponseEntity<ApiResponse> getPedidoByNumIdentificador(@PathVariable String num_identificador) {
+        Optional<PedidoDto> pedidoDto = pedidoService.getPedidoByNumIdentificador(num_identificador);
         return pedidoDto.map(dto -> ResponseEntity.ok(new ApiResponse(dto, HttpStatus.OK)))
                 .orElseGet(() -> ResponseEntity.status(HttpStatus.NOT_FOUND).body(new ApiResponse(HttpStatus.NOT_FOUND, true, "Pedido no encontrado")));
     }
 
-    // Crear o actualizar pedido
+    // Crear un nuevo pedido
     @PostMapping
     public ResponseEntity<ApiResponse> savePedido(@RequestBody PedidoDto pedidoDto) {
-        PedidoBean pedidoBean = new PedidoBean();
-        pedidoBean.setNumidentificador(pedidoDto.getNumidentificador());
-        pedidoBean.setTotal(pedidoDto.getTotal());
-
-        // Asignar usuario y role aquí si es necesario
-        // pedidoBean.setUsuario(usuarioService.getUsuarioById(pedidoDto.getId_usuario()).orElseThrow(...));
-        // pedidoBean.setRole(roleService.getRoleById(pedidoDto.getId_role()).orElseThrow(...));
-
-        PedidoDto savedPedido = pedidoService.savePedido(pedidoBean);
+        PedidoDto savedPedido = pedidoService.savePedido(pedidoDto);
         return ResponseEntity.status(HttpStatus.CREATED).body(new ApiResponse(savedPedido, HttpStatus.CREATED));
     }
 }
+
+

@@ -71,14 +71,43 @@ public class ProductoController {
     @PutMapping(value = "/{id}", consumes = MediaType.MULTIPART_FORM_DATA_VALUE)
     public ResponseEntity<ApiResponse> updateProducto(
             @PathVariable Integer id,
-            @ModelAttribute ProductoDto productoDto,
+            @RequestParam(value = "nombre", required = false) String nombre,
+            @RequestParam(value = "stock", required = false) Integer stock,
+            @RequestParam(value = "precio", required = false) Double precio,
+            @RequestParam(value = "descripcion", required = false) String descripcion,
+            @RequestParam(value = "categoria", required = false) String categoria,
             @RequestParam(value = "imagen", required = false) MultipartFile imagen) {
 
-        Optional<ProductoDto> updatedProducto = productoService.updateProducto(id, productoDto, imagen);
+        Optional<ProductoDto> productoExistente = productoService.getProductoById(id);
+        if (!productoExistente.isPresent()) {
+            return ResponseEntity.status(HttpStatus.NOT_FOUND)
+                    .body(new ApiResponse(HttpStatus.NOT_FOUND, true, "Producto no encontrado"));
+        }
+
+        ProductoDto productoActualizado = productoExistente.get();
+
+        // Actualiza solo los campos que no sean nulos
+        if (nombre != null) productoActualizado.setNombre(nombre);
+        if (stock != null) productoActualizado.setStock(stock);
+        if (precio != null) productoActualizado.setPrecio(precio);
+        if (descripcion != null) productoActualizado.setDescripcion(descripcion);
+        if (categoria != null) productoActualizado.setCategoria(categoria);
+
+        // Maneja la imagen si se proporciona
+        try {
+            if (imagen != null && !imagen.isEmpty()) {
+                productoActualizado.setImagen(imagen.getBytes());
+            }
+        } catch (IOException e) {
+            throw new RuntimeException("Error al procesar la imagen", e);
+        }
+
+        Optional<ProductoDto> updatedProducto = productoService.updateProducto(id, productoActualizado);
         return updatedProducto.map(dto -> ResponseEntity.ok(new ApiResponse(dto, HttpStatus.OK)))
                 .orElseGet(() -> ResponseEntity.status(HttpStatus.NOT_FOUND)
                         .body(new ApiResponse(HttpStatus.NOT_FOUND, true, "Producto no encontrado")));
     }
+
 
     @DeleteMapping("/{id}")
     public ResponseEntity<ApiResponse> deleteProducto(@PathVariable Integer id) {

@@ -1,9 +1,6 @@
 package utez.edu.mx.IntPinturaAPI.models.dto;
 
-import lombok.AllArgsConstructor;
-import lombok.Builder;
-import lombok.Getter;
-import lombok.NoArgsConstructor;
+import lombok.*;
 import utez.edu.mx.IntPinturaAPI.models.entity.ProductoBean;
 
 import jakarta.validation.constraints.NotBlank;
@@ -13,14 +10,15 @@ import org.springframework.web.multipart.MultipartFile;
 import java.io.IOException;
 
 @Getter
+@Setter
 @AllArgsConstructor
 @NoArgsConstructor
 @Builder
 public class ProductoDto {
     private Integer id_producto;
     private String nombre;
-    private int stock;
-    private double precio;
+    private Integer  stock;
+    private Double precio;
     private String descripcion;
 
     @NotBlank(message = "La categoría no puede estar vacía")

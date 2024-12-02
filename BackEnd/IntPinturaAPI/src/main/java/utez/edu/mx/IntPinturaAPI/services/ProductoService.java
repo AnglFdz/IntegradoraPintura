@@ -58,29 +58,25 @@ public class ProductoService {
     }
 
 
-    public Optional<ProductoDto> updateProducto(Integer id, ProductoDto productoDto, MultipartFile imagen) {
+    public Optional<ProductoDto> updateProducto(Integer id, ProductoDto productoDto) {
         Optional<ProductoBean> existingProducto = productoRepository.findById(id);
         if (existingProducto.isPresent()) {
             ProductoBean producto = existingProducto.get();
-            producto.setNombre(productoDto.getNombre());
-            producto.setStock(productoDto.getStock());
-            producto.setPrecio(productoDto.getPrecio());
-            producto.setDescripcion(productoDto.getDescripcion());
-            producto.setCategoria(productoDto.getCategoria());
 
-            try {
-                if (imagen != null && !imagen.isEmpty()) {
-                    producto.setImagen(imagen.getBytes()); // Actualizar la imagen si se proporciona
-                }
-            } catch (IOException e) {
-                throw new RuntimeException("Error al procesar la imagen", e);
-            }
+            // Actualiza solo si los valores no son nulos
+            if (productoDto.getNombre() != null) producto.setNombre(productoDto.getNombre());
+            if (productoDto.getStock() != null) producto.setStock(productoDto.getStock());
+            if (productoDto.getPrecio() != null) producto.setPrecio(productoDto.getPrecio());
+            if (productoDto.getDescripcion() != null) producto.setDescripcion(productoDto.getDescripcion());
+            if (productoDto.getCategoria() != null) producto.setCategoria(productoDto.getCategoria());
+            if (productoDto.getImagen() != null) producto.setImagen(productoDto.getImagen());
 
             ProductoBean updatedProducto = productoRepository.save(producto);
             return Optional.of(toDTO(updatedProducto));
         }
         return Optional.empty();
     }
+
 
 
     // Eliminar producto

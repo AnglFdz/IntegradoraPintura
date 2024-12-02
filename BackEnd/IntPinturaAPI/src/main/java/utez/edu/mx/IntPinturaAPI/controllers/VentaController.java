@@ -27,8 +27,6 @@ public class VentaController {
         return ResponseEntity.ok(ventas);
     }
 
-
-
     // Obtener venta por ID
     @GetMapping("/{id}")
     public ResponseEntity<ApiResponse> getVentaById(@PathVariable Integer id) {
@@ -45,7 +43,13 @@ public class VentaController {
         return ResponseEntity.status(HttpStatus.CREATED).body(new ApiResponse(savedVenta, HttpStatus.CREATED));
     }
 
-    // Eliminar una venta
+    @PutMapping("/{idVenta}/pedido/{idPedido}")
+    public ResponseEntity<ApiResponse> updateVentaWithPedido(@PathVariable Integer idVenta, @PathVariable Integer idPedido) {
+        VentaDto updatedVenta = ventaService.updateVentaWithPedido(idVenta, idPedido);
+        return ResponseEntity.ok(new ApiResponse(updatedVenta, HttpStatus.OK));
+    }
+
+
     @DeleteMapping("/{id}")
     public ResponseEntity<ApiResponse> deleteVenta(@PathVariable Integer id) {
         ventaService.deleteVenta(id);
