@@ -192,12 +192,11 @@ export const addPurchase = async ({data}) => {
 export const mergePO = (data) => {
     sendMessage('load', 0);
     const response = Connection.mergePurchaseOrder(data);
-    console.log(response);    
-    if (response.status === 201) {
-        sendMessage(200, 7);
-        return response;
-    } else {
+    if (!response) {
         sendMessage(400, 7);
         return null;
+    } else {
+        sendMessage(200, 7);
+        return response;
     }
 }
