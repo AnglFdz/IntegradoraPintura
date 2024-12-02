@@ -91,15 +91,22 @@ const Catalogue = () => {
     />
   );
 
-  const cart_items = [];
-
   function insert_items_cart(item) {
-    cart_items.push(item);
-    setCartCount(cartCount + 1);
-    setCartItems((prevItems) => [...prevItems, item]);
+    setCartItems((prevItems) => {
+      const existingItem = prevItems.find((cartItem) => cartItem.id_producto === item.id_producto);
+      if (existingItem) {
+        return prevItems.map((cartItem) =>
+          cartItem.id_producto === item.id_producto
+            ? { ...cartItem, cantidad: cartItem.cantidad + 1 }
+            : cartItem
+        );
+      } else {
+        return [...prevItems, { ...item, cantidad: 1 }];
+      }
+    });
+    setCartCount((prevCount) => prevCount + 1);
   }
 
-  // Filtrar los productos según la categoría seleccionada
   const filteredProducts =
     selectedCategory === "All"
       ? products
