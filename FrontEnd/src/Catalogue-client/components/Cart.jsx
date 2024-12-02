@@ -14,8 +14,8 @@ const Cart = (props) => {
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState(null);
   const [success, setSuccess] = useState(null);
-  
-  const id_usuario = getData("id"); 
+
+  const id_usuario = getData("id");
   const id_role = getData("role");
 
   useEffect(() => {
@@ -90,6 +90,26 @@ const Cart = (props) => {
     }
   };
 
+  // Calcular el total del carrito con descuento aplicado
+  const { discountedTotal, discountAmount } = cartItems.reduce(
+    (acc, item) => {
+      const itemSubtotal = item.cantidad * item.precio;
+
+      // Aplicar descuento del 5% si no es categoría "Materiales" y hay 3+ unidades
+      if (item.categoria !== "Materiales" && item.cantidad >= 3) {
+        const discount = itemSubtotal * 0.05;
+        acc.discountAmount += discount;
+        acc.discountedTotal += itemSubtotal - discount;
+      } else {
+        acc.discountedTotal += itemSubtotal;
+      }
+
+      return acc;
+    },
+    { discountedTotal: 0, discountAmount: 0 }
+  );
+
+
   return (
     <div className="grid">
       {/* Sección de productos */}
@@ -157,9 +177,20 @@ const Cart = (props) => {
             placeholder="Ingrese el número identificador"
             className="w-full mb-3"
           />
-          <h2 className="text-2xl font-bold text-secondary-700 mb-2">Total de tu compra</h2>
-          <div className="w-full shadow-2 border-round p-3 flex align-items-center justify-content-center" style={{ background: "var(--blue-900)", color: "#fff", fontSize: "2.5rem", fontWeight: "bold" }}>
-            ${total.toFixed(2)}
+          <div className="w-full">
+            {/* Total y descuento */}
+            <h2 className="text-2xl font-bold text-secondary-700 mb-2">Total de tu compra</h2>
+            <div className="w-full shadow-2 border-round p-3 flex align-items-center justify-content-center"
+              style={{ background: "var(--blue-900)", color: "#fff", fontSize: "1.5rem" }}>
+              ${discountedTotal.toFixed(2)} {discountAmount > 0 && "(descuento aplicado)"}
+            </div>
+            {/* Mostrar el desglose del descuento si existe */}
+            {discountAmount > 0 && (
+              <p style={{ color: "green", fontSize: "1rem", textAlign: "center" }}>
+                Has ahorrado ${discountAmount.toFixed(2)} gracias al descuento.
+              </p>
+            )}
+
           </div>
           <Button
             label={loading ? "Procesando..." : "Finalizar Compra"}
