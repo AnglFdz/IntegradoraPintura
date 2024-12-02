@@ -52,7 +52,7 @@ export const addProduct = async (data) => {
     try {
         const response = await ApiManager.post('/productos', data, {
             headers: {
-                'Authorization': `Bearer ${getData()}`
+                'Authorization': `Bearer ${getData('token')}`
             }
         });
         return response;
@@ -61,11 +61,24 @@ export const addProduct = async (data) => {
     }
 }
 
+export const updateProduct = async (data) => {
+    try {
+        const response = await ApiManager.put(`/productos/${data.id}`, data, {
+            headers: {
+                'Authorization': `Bearer ${getData('token')}`
+            }
+        });
+        return response;
+    } catch (error) {
+        return error;        
+    }
+}
+
 export const addOrder = async (data) => {
     try {
         const response = await ApiManager.post('/pedidos', data, {
             headers: {
-                'Authorization': `Bearer ${getToken()}`
+                'Authorization': `Bearer ${getData('token')}`
             }
         });
         return response;

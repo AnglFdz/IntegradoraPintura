@@ -3,7 +3,6 @@ import { Card } from "primereact/card";
 import { Button } from "primereact/button";
 
 function CardPrime({ title, description, image, stock,categoria, onAction }) {
-  
   const header = <img alt={title} src={image} style={{ width: "100%" }} />;
   const footer = (
     <span>

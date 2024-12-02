@@ -18,9 +18,8 @@ const Catalogue = () => {
   useEffect(() => {
     const fetchProducts = async () => {
       try {
-        const fetchedProducts = await getProducts(); 
+        const fetchedProducts = await getProducts();
         setProducts(fetchedProducts);
-        
       } catch (error) {
         console.error("Error fetching products:", error);
       }
@@ -130,7 +129,7 @@ const Catalogue = () => {
               description={card.descripcion}
               image={card.imagen}
               stock={card.stock}
-              footer={card.categoria}
+              categoria={card.categoria}
               onAction={() => insert_items_cart(card)}
             />
           </div>

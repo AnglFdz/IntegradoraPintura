@@ -39,7 +39,8 @@ function Cart({products, remove, add}) {
     <>
       <div className="border-1 border-round-xl p-1 h-auto field">
         <div>
-        <VirtualScroller items={products} itemSize={155} itemTemplate={itemTemplate} className="col-12 border-1 bg-red-300 surface-border border-round" style={{ width: 'auto', height: '25rem' }}  />
+          {products.length === 0 ? <p className='flex align-items-center justify-content-center text-2xl font-bold h-24rem'>No hay productos en el carrito</p> : 
+        <VirtualScroller items={products} itemSize={155} itemTemplate={itemTemplate} className="col-12 border-1 surface-border border-round" style={{ width: 'auto', height: '25rem' }}  /> }
         </div>
         <div className='field flex justify-content-start align-items-center text-xl bg-gray-900 w-full border-round-xl mt-2'>
           <div className=' grid'>
