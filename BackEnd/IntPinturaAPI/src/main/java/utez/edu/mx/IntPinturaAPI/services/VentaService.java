@@ -50,8 +50,6 @@ public class VentaService {
     }
 
 
-
-
     // Crear o actualizar venta
     public VentaDto saveVenta(VentaDto ventaDto) {
         VentaBean ventaBean = new VentaBean();
@@ -131,6 +129,7 @@ public class VentaService {
                                 .id_producto(producto.getId_producto())
                                 .nombre(producto.getNombre())
                                 .stock(producto.getStock())
+                                .precio(producto.getPrecio())
                                 .build())
                         .collect(Collectors.toList()))
                 .build();

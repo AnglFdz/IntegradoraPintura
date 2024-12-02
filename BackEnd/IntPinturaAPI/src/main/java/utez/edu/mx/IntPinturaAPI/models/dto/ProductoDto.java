@@ -34,8 +34,8 @@ public class ProductoDto {
                 .descripcion(this.descripcion)
                 .categoria(this.categoria)
                 .build();
-        if (imagen != null) { // Solo verifica que no sea nulo
-            producto.setImagen(imagen); // Asigna directamente el byte[]
+        if (imagen != null) {
+            producto.setImagen(imagen);
         }
         return producto;
     }
@@ -49,7 +49,7 @@ public class ProductoDto {
                 .precio(producto.getPrecio())
                 .descripcion(producto.getDescripcion())
                 .categoria(producto.getCategoria())
-                .imagen(producto.getImagen() != null ? producto.getImagen() : null) // Incluye los bytes de la imagen
+                .imagen(producto.getImagen() != null ? producto.getImagen() : null)
                 .build();
     }
 

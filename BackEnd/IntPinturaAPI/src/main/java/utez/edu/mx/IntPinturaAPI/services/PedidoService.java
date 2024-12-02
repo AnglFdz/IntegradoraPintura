@@ -11,6 +11,7 @@ import utez.edu.mx.IntPinturaAPI.models.entity.UsuarioBean;
 
 import java.util.List;
 import java.util.Optional;
+import java.util.Set;
 import java.util.stream.Collectors;
 
 @Service
@@ -38,18 +39,19 @@ public class PedidoService {
 
     public PedidoDto savePedido(PedidoDto pedidoDto) {
         PedidoBean pedidoBean = new PedidoBean();
-        pedidoBean.setNumidentificador(generateTrackingCode());
+        pedidoBean.setNumidentificador(generateTrackingCode()); // Generar clave de rastreo
         pedidoBean.setTotal(pedidoDto.getTotal());
-        pedidoBean.setRole(null);
+        pedidoBean.setRole(null); // Rol nulo por defecto
 
         if (pedidoDto.getId_usuario() != null) {
             UsuarioBean usuario = usuarioDao.findById(pedidoDto.getId_usuario())
-                    .orElseThrow(() -> new RuntimeException("Usuario con ID " + pedidoDto.getId_usuario() + " no encontrado"));
+                    .orElseThrow(() -> new RuntimeException("Usuario con ID " + pedidoDto.getId_usuario() + " no encontrado."));
             pedidoBean.setUsuario(usuario);
         }
 
+        // Guardar pedido en la base de datos
         PedidoBean savedPedido = pedidoDao.save(pedidoBean);
-        return toDTO(savedPedido);
+        return toDTO(savedPedido); // Convertir a DTO para la respuesta
     }
 
     private String generateTrackingCode() {
@@ -78,7 +80,9 @@ public class PedidoService {
                 .total(pedido.getTotal())
                 .id_usuario(pedido.getUsuario() != null ? pedido.getUsuario().getId_usuario() : null)
                 .id_role(pedido.getRole() != null ? pedido.getRole().getId_role() : null)
-                .ventas(pedido.getVentas().stream()
+                .ventas(Optional.ofNullable(pedido.getVentas()) // Manejar ventas null
+                        .orElse(Set.of()) // Retornar un conjunto vacío si no hay ventas
+                        .stream()
                         .map(venta -> VentaDto.builder()
                                 .id_venta(venta.getId_venta())
                                 .cantidad(venta.getCantidad())
