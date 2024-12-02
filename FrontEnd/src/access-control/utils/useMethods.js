@@ -3,8 +3,8 @@ import * as Connection from './use_connection'
 import CryptoJS from 'crypto-js';
 
 /* Alertas */
-const successMessage = ["Inicio de sesión correcto"];
-const errorMessage = ["Usuario o contraseña incorrectos"];
+const successMessage = ["Inicio de sesión correcto", "Registro correcto", "Producto agregado correctamente", "Producto eliminado correctamente", "Producto actualizado correctamente", "Compra realizada correctamente", "Pedido realizado correctamente", "Se relacionó correctamente el pedido con la compra"];   
+const errorMessage = ["Usuario o contraseña incorrectos", "Error al registrar", "Error al agregar producto", "Error al eliminar producto", "Error al actualizar producto", "Error al realizar la compra", "Error al realizar el pedido", "Error al relacionar el pedido con la compra"];
 
 export const getData = (option) => {
     const session = localStorage.getItem('session');
@@ -13,7 +13,7 @@ export const getData = (option) => {
     } else {
         const sessionData = JSON.parse(session);
         const bytes = CryptoJS.AES.decrypt(sessionData.user, 'pintura');
-        const data = option === 'token' ? JSON.parse(bytes.toString(CryptoJS.enc.Utf8)).token : option === 'role' ? JSON.parse(bytes.toString(CryptoJS.enc.Utf8)).role : JSON.parse(bytes.toString(CryptoJS.enc.Utf8)).id;
+        const data = option === 'token' ? JSON.parse(bytes.toString(CryptoJS.enc.Utf8)).token : option === 'role' ? JSON.parse(bytes.toString(CryptoJS.enc.Utf8)).role : option === 'id' && JSON.parse(bytes.toString(CryptoJS.enc.Utf8)).id;
         return data;
     }
 }
@@ -111,10 +111,10 @@ export const register = async ({ data, navigate }) => {
     }
     const response = await Connection.sendRegister(user);
     if (response.status === 201) {
-        sendMessage(200, 0)
+        sendMessage(200, 1);
         navigate('/');
     } else {
-        sendMessage(0, 'error');
+        sendMessage(400, 1);
     }
 }
 
@@ -131,20 +131,22 @@ export const setProduct = async ({ data }) => {
     sendMessage('load', 0);
     const response = await Connection.addProduct(data);
     if (response.status === 201) {
-        sendMessage(200, 0);
+        sendMessage(200, 2);  
         return response;
     } else {
+        sendMessage(400, 2);
         return null;
     }
 }
 
-export const setOrder = async ({data}) => {
+export const setOrder = async (data) => {
     sendMessage('load',0);
     const response = await Connection.addOrder(data);
     if(response.status === 201) {
-        sendMessage(200, 0);
+        sendMessage(200, 6);
         return response
     } else {
+        sendMessage(400, 6);
         return null;
     }
 }
@@ -153,10 +155,49 @@ export const setOrder = async ({data}) => {
 export const eliminateProduct = async ({data}) => {
     sendMessage('load', 0);
     const response = await Connection.deleteProduct(data);
-    if (response.status === 204) {
-        sendMessage(200, 0);
+    console.log(response.status);    
+    if (response.status === 200) {
+        sendMessage(200, 3);
         return response;
     } else {
+        sendMessage(400, 3);
+        return null;
+    }
+}
+
+export const putProduct = async ({data}) => {
+    sendMessage('load', 0);
+    const response = await Connection.updateProduct(data);
+    if (response.status === 200) {
+        sendMessage(200, 4);
+        return response;
+    } else {
+        sendMessage(400, 4);
+        return null;
+    }
+}
+
+export const addPurchase = async ({data}) => {
+    sendMessage('load', 0);
+    const response = await Connection.setPurchase(data);
+    if (response.status === 201) {
+        sendMessage(200, 5);
+        return response;
+    } else {
+        sendMessage(400, 5);
+        return null;
+    }
+}
+
+export const mergePO = (data) => {
+    sendMessage('load', 0);
+    const response = Connection.mergePurchaseOrder(data);
+    console.log(response);    
+    if (response.status === 201) {
+        sendMessage(200, 7);
+        return response;
+    } else {
+        sendMessage(400, 7);
         return null;
     }
 }

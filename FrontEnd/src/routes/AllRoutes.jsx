@@ -18,7 +18,6 @@ function AllRoutes() {
     const [role, setRole] = React.useState(validSessionExist ? validSessionExist : null);
     const [reload, setReload] = React.useState(false);
     const navigate = useNavigate();
-    console.log(role);
     
 
     const Reload = () => {

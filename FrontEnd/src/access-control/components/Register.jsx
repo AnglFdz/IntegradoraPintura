@@ -64,6 +64,7 @@ function Register() {
                             <p className='text-sm'>- Debe tener minimo 8 caracteres y maximo 20</p>
                             <p className='text-sm'>- Debe tener minimo 8 caracteres y maximo 20</p>
                         </details>
+                        <span className={`${styleDivision}`}>Confirma tu contraseña:</span>
                         <Password invalid={!confirmPassword} onChange={(e) => setConfirmPassword(e.target.value)} className={`${styleDivision}`} placeholder="Confirmar contraseña" toggleMask />
                         <Button className={`${styleDivision}`} onClick={(e) => sendNewUser(e)} label="Registrarse" disabled={!user} />
                     </form>

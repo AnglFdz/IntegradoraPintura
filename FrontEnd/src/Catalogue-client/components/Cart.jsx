@@ -120,7 +120,7 @@ const Cart = (props) => {
               <div className="p-card my-1 p-3 shadow-2 border-round surface-0 " key={index}>
                 <div className="flex align-items-center gap-3">
                   <img
-                    src={item.image}
+                    src={`data:image/png;base64,${item.imagen}`}
                     alt={item.nombre}
                     className="border-round"
                     style={{ width: '150px', height: '150px', objectFit: 'cover' }}

@@ -52,7 +52,22 @@ export const addProduct = async (data) => {
     try {
         const response = await ApiManager.post('/productos', data, {
             headers: {
-                'Authorization': `Bearer ${getData()}`
+                'Authorization': `Bearer ${getData('token')}`,
+                'Content-Type': 'multipart/form-data'
+            }
+        });
+        return response;
+    } catch (error) {
+        return error;
+    }
+}
+
+export const updateProduct = async (data) => {
+    try {
+        const response = await ApiManager.put(`/productos/${data.id}`, data, {
+            headers: {
+                'Authorization': `Bearer ${getData('token')}`,
+                'Content-Type': 'multipart/form-data'
             }
         });
         return response;
@@ -65,11 +80,40 @@ export const addOrder = async (data) => {
     try {
         const response = await ApiManager.post('/pedidos', data, {
             headers: {
-                'Authorization': `Bearer ${getToken()}`
+                'Authorization': `Bearer ${getData('token')}`
             }
         });
         return response;
     } catch (error) {
+        return error;
+    }
+}
+
+export const setPurchase = async (data) => {
+        console.log(data);     
+    try {   
+        const response = await ApiManager.post('/ventas', data, {
+            headers: {
+                'Authorization': `Bearer ${getData('token')}`
+            }
+        });
+        return response;
+    }
+    catch (error) {
+        return error;
+    }
+}
+
+export const mergePurchaseOrder = async (data) => {
+    try {
+        const response = await ApiManager.put(`/ventas/${data.id_venta}/pedido/${data.id_pedido}`, {
+            headers: {
+                'Authorization': `Bearer ${getData('token')}`
+            }
+        });
+        return response;
+    }
+    catch (error) {
         return error;
     }
 }

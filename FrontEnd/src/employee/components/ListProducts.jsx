@@ -6,6 +6,7 @@ function ListProducts() {
     const styleHeader = 'bg-blue-600 text-bluegray-50 border-round-xl flex justify-content-center';
     const [productosCarrito, setProductosCarrito] = useState([]);
     const [isMounted, setIsMounted] = useState(false);
+    const [filter, setFilter] = useState('');
 
     const obtenerProductosCarrito = (product) => {
         setProductosCarrito((prevProductos) => {
@@ -24,7 +25,11 @@ function ListProducts() {
             });
           } else {
             // Si el producto no existe, lo agregamos con cantidad inicial 1
+            if(product.stock > 0){
             return [...prevProductos, { ...product, cantidad: 1 }];
+          } else {
+            return [...prevProductos];
+          }
           }
         });
       };
