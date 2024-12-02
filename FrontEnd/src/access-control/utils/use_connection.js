@@ -52,7 +52,8 @@ export const addProduct = async (data) => {
     try {
         const response = await ApiManager.post('/productos', data, {
             headers: {
-                'Authorization': `Bearer ${getData('token')}`
+                'Authorization': `Bearer ${getData('token')}`,
+                'Content-Type': 'multipart/form-data'
             }
         });
         return response;
@@ -65,12 +66,13 @@ export const updateProduct = async (data) => {
     try {
         const response = await ApiManager.put(`/productos/${data.id}`, data, {
             headers: {
-                'Authorization': `Bearer ${getData('token')}`
+                'Authorization': `Bearer ${getData('token')}`,
+                'Content-Type': 'multipart/form-data'
             }
         });
         return response;
     } catch (error) {
-        return error;        
+        return error;
     }
 }
 
@@ -83,6 +85,21 @@ export const addOrder = async (data) => {
         });
         return response;
     } catch (error) {
+        return error;
+    }
+}
+
+export const setPurchase = async (data) => {
+        console.log(data);     
+    try {   
+        const response = await ApiManager.post('/ventas', data, {
+            headers: {
+                'Authorization': `Bearer ${getData('token')}`
+            }
+        });
+        return response;
+    }
+    catch (error) {
         return error;
     }
 }

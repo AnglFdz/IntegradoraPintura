@@ -1,7 +1,9 @@
 import React from 'react'
 import ProductCard from './ProductCard';
+import { Button } from 'primereact/button';
 import { VirtualScroller } from 'primereact/virtualscroller';
 import { InputText } from 'primereact/inputtext';
+import { addPurchase, getData } from '../../access-control/utils/useMethods';
 
 function Cart({products, remove, add}) {
   const [isMounted, setIsMounted] = React.useState(false);
@@ -9,13 +11,38 @@ function Cart({products, remove, add}) {
   const [cambio, setCambio] = React.useState(0);
   const [pago, setPago] = React.useState(0);
 
+  const calcularCantidad = ()=>{
+    let cantidad = 0;
+    products.forEach((item) => {
+      cantidad += item.cantidad;
+    });
+    console.log(cantidad);    
+    return cantidad;
+  }
+
   const calcularPago = () =>{
     let total = 0;
     products.forEach((item) => {
       total += item.precio * item.cantidad;
     });
     setTotal(total);
-    setCambio(pago - total);
+    setCambio(pago > total ? pago - total : 0);
+  }
+
+  const setVenta = async () => {
+    const newArray = products.map((item) => {
+      return item.id_producto;
+    }) 
+    const data = {
+      total: total,
+      cantidad: calcularCantidad(),
+      fechaVenta: 'hol',
+      id_usuario: getData('id'),
+      id_pedido: null,
+      productos: newArray
+    }
+    const response = await addPurchase({data});
+    response && console.log('Venta realizada');
   }
 
   React.useEffect(() => {
@@ -49,7 +76,7 @@ function Cart({products, remove, add}) {
                 <p>Total:</p>
                 <p>Pago:</p>
                 <p style={{marginTop: '30px'}}>Cambio:</p>
-                <button>Hola mundo</button>
+                <Button label='Realizar compra' className='bg-bluegray-50 text-blue-500' onClick={()=>setVenta()} disabled={pago <= total}/>
               </div>
               <div>
                 <p className='text-50'>${total} </p>

@@ -3,8 +3,8 @@ import * as Connection from './use_connection'
 import CryptoJS from 'crypto-js';
 
 /* Alertas */
-const successMessage = ["Inicio de sesión correcto", "Registro correcto", "Producto agregado correctamente", "Producto eliminado correctamente", "Producto actualizado correctamente"];
-const errorMessage = ["Usuario o contraseña incorrectos", "Error al registrar", "Error al agregar producto", "Error al eliminar producto", "Error al actualizar producto"];
+const successMessage = ["Inicio de sesión correcto", "Registro correcto", "Producto agregado correctamente", "Producto eliminado correctamente", "Producto actualizado correctamente", "Compra realizada correctamente"];   
+const errorMessage = ["Usuario o contraseña incorrectos", "Error al registrar", "Error al agregar producto", "Error al eliminar producto", "Error al actualizar producto", "Error al realizar la compra"];
 
 export const getData = (option) => {
     const session = localStorage.getItem('session');
@@ -154,7 +154,8 @@ export const setOrder = async ({data}) => {
 export const eliminateProduct = async ({data}) => {
     sendMessage('load', 0);
     const response = await Connection.deleteProduct(data);
-    if (response.status === 204) {
+    console.log(response.status);    
+    if (response.status === 200) {
         sendMessage(200, 3);
         return response;
     } else {
@@ -171,6 +172,18 @@ export const putProduct = async ({data}) => {
         return response;
     } else {
         sendMessage(400, 4);
+        return null;
+    }
+}
+
+export const addPurchase = async ({data}) => {
+    sendMessage('load', 0);
+    const response = await Connection.setPurchase(data);
+    if (response.status === 201) {
+        sendMessage(200, 5);
+        return response;
+    } else {
+        sendMessage(400, 5);
         return null;
     }
 }

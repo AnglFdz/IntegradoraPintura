@@ -16,30 +16,19 @@ function ModalItems({ text, product, reload }) {
     const [price, setPrice] = useState(product ? product.precio : "");
     const [stock, setStock] = useState(product ? product.stock : "");
     const [image, setImage] = useState(product ? product.imagen : "");
+    const [imagePrev, setImagePrev] = useState("");
     const [category, setCategory] = useState(product ? product.categoria : "");
 
+
     React.useEffect(() => {     
-    }, [reload]);
+    }, [reload, image]);
 
     const tratamentImage = (file) => {
         const reader = new FileReader();
-        reader.onload = () => setImage(reader.result);
-        reader.onerror = () => console.error("Error al leer el archivo.");
         reader.readAsDataURL(file);
-    };
-
-    const saveImage = (id) => {
-        let listImages = localStorage.getItem("images")
-        if(!listImages){
-            let images = [];
-            images.push({imagen: image, id: id});
-            localStorage.setItem("images", JSON.stringify(images));
-        }
-        else{
-            let images = JSON.parse(listImages);
-            images.push({imagen: image, id: id});
-            localStorage.setItem("images", JSON.stringify(images));
-        }
+        reader.onloadend = () => {
+            setImagePrev(reader.result);
+        };
     }
 
     const saveProduct = async () => {
@@ -50,10 +39,10 @@ function ModalItems({ text, product, reload }) {
             categoria: category,
             stock: stock,
             imagen: image
-        };
+        };     
+        setVisible(false);   
         await setProduct({ data });
         reload();
-        setVisible(false);
     };
 
     const updateInfo = async () => {
@@ -66,6 +55,7 @@ function ModalItems({ text, product, reload }) {
             stock: stock,
             imagen: image
         }
+        console.log(data);        
         setVisible(false);
         await putProduct({ data });
         reload();
@@ -93,7 +83,7 @@ function ModalItems({ text, product, reload }) {
                 <div className="grid">
                     <div className="flex justify-content-center col-12">
                         <img
-                            src={image ? image : ImageTest}
+                            src={ text ? image != '' ? imagePrev : ImageTest : imagePrev ? imagePrev :`data:image/png;base64,${image}`  }
                             alt="Vista previa"
                             className="w-10rem"
                         />
@@ -138,7 +128,7 @@ function ModalItems({ text, product, reload }) {
                             type="file"
                             className={`${styleInputsTexts} col-6`}
                             accept="image/*"
-                            onChange={(e) => tratamentImage(e.target.files[0])}
+                            onChange={(e) => {setImage(e.target.files[0]); tratamentImage(e.target.files[0])}}
                         />
                     </div>
                     <div className="col-6">

@@ -21,7 +21,7 @@ function ItemsList({page, products, filter, addProduct}) {
 
     const tratamentImage = (file) => {
         return (
-            <img src={file.imagen} alt="Imagen" style={{ width: '100px', height: '100px' }} />
+            <img src={`data:image/png;base64,${file.imagen}`} alt="Imagen" style={{ width: '100px', height: '100px' }} />
         )
     }
 
