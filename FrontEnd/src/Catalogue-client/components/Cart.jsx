@@ -10,13 +10,11 @@ import { getData } from "../../access-control/utils/useMethods";
 const Cart = (props) => {
   const { items } = props;
   const [cartItems, setCartItems] = useState(items || []);
-  const [numIdentificador, setNumIdentificador] = useState(""); // Nuevo estado para el número identificador
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState(null);
   const [success, setSuccess] = useState(null);
-  
-  const id_usuario = getData("id"); 
-  const id_role = getData("role");
+
+  const id_usuario = getData("id");
 
   useEffect(() => {
     if (items.length > 0) {
@@ -55,23 +53,15 @@ const Cart = (props) => {
     setError(null);
     setSuccess(null);
 
-    if (!id_usuario || !id_role) {
+    if (!id_usuario) {
       setError("No se pudo obtener la información del usuario.");
       setLoading(false);
       return;
     }
 
-    if (!numIdentificador.trim()) {
-      setError("Debe ingresar un número identificador válido para continuar.");
-      setLoading(false);
-      return;
-    }
-
     const data = {
-      numidentificador: numIdentificador.trim(),
       total: total,
       id_usuario: id_usuario,
-      id_role: id_role,
     };
 
     try {
@@ -81,6 +71,7 @@ const Cart = (props) => {
         console.log("Respuesta del servidor:", response);
       } else {
         setError("Hubo un error al enviar el pedido.");
+        console.log("Respuesta del servidor:", response);
       }
     } catch (error) {
       setError("Hubo un error al enviar el pedido.");
@@ -89,6 +80,26 @@ const Cart = (props) => {
       setLoading(false);
     }
   };
+
+  // Calcular el total del carrito con descuento aplicado
+  const { discountedTotal, discountAmount } = cartItems.reduce(
+    (acc, item) => {
+      const itemSubtotal = item.cantidad * item.precio;
+
+      // Aplicar descuento del 5% si no es categoría "Materiales" y hay 3+ unidades
+      if (item.categoria !== "Materiales" && item.cantidad >= 3) {
+        const discount = itemSubtotal * 0.05;
+        acc.discountAmount += discount;
+        acc.discountedTotal += itemSubtotal - discount;
+      } else {
+        acc.discountedTotal += itemSubtotal;
+      }
+
+      return acc;
+    },
+    { discountedTotal: 0, discountAmount: 0 }
+  );
+
 
   return (
     <div className="grid">
@@ -150,23 +161,27 @@ const Cart = (props) => {
           <h1 className="font-bold">Entrega</h1>
         </div>
         <div className="p-card mt-2 shadow-4 border-round surface-card p-4 flex flex-column align-items-center justify-content-center">
-          <h2 className="text-2xl font-bold text-secondary-700 mb-2">Número Identificador</h2>
-          <InputText
-            value={numIdentificador}
-            onChange={(e) => setNumIdentificador(e.target.value)}
-            placeholder="Ingrese el número identificador"
-            className="w-full mb-3"
-          />
-          <h2 className="text-2xl font-bold text-secondary-700 mb-2">Total de tu compra</h2>
-          <div className="w-full shadow-2 border-round p-3 flex align-items-center justify-content-center" style={{ background: "var(--blue-900)", color: "#fff", fontSize: "2.5rem", fontWeight: "bold" }}>
-            ${total.toFixed(2)}
+          <div className="w-full">
+            {/* Total y descuento */}
+            <h2 className="text-2xl font-bold text-secondary-700 mb-2">Total de tu compra</h2>
+            <div className="w-full shadow-2 border-round p-3 flex align-items-center justify-content-center"
+              style={{ background: "var(--blue-900)", color: "#fff", fontSize: "1.5rem" }}>
+              ${discountedTotal.toFixed(2)} {discountAmount > 0 && "(descuento aplicado)"}
+            </div>
+            {/* Mostrar el desglose del descuento si existe */}
+            {discountAmount > 0 && (
+              <p style={{ color: "green", fontSize: "1rem", textAlign: "center" }}>
+                Has ahorrado ${discountAmount.toFixed(2)} gracias al descuento.
+              </p>
+            )}
+
           </div>
           <Button
             label={loading ? "Procesando..." : "Finalizar Compra"}
             icon="pi pi-check"
             className="w-full mt-3"
             onClick={handleCheckout}
-            disabled={loading || cartItems.length === 0 || !numIdentificador.trim()}
+            disabled={loading || cartItems.length === 0}
           />
           {error && <p style={{ color: 'red', marginTop: '1rem' }}>{error}</p>}
           {success && <p style={{ color: 'green', marginTop: '1rem' }}>{success}</p>}
