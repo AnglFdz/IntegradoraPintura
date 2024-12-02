@@ -3,13 +3,14 @@ import ProductCard from './ProductCard';
 import { Button } from 'primereact/button';
 import { VirtualScroller } from 'primereact/virtualscroller';
 import { InputText } from 'primereact/inputtext';
-import { addPurchase, getData } from '../../access-control/utils/useMethods';
+import { addPurchase, getData, mergePO, setOrder } from '../../access-control/utils/useMethods';
 
 function Cart({products, remove, add}) {
   const [isMounted, setIsMounted] = React.useState(false);
   const [total, setTotal] = React.useState(0);
   const [cambio, setCambio] = React.useState(0);
   const [pago, setPago] = React.useState(0);
+  const [merge, setMerge] = React.useState({});
 
   const calcularCantidad = ()=>{
     let cantidad = 0;
@@ -41,8 +42,29 @@ function Cart({products, remove, add}) {
       id_pedido: null,
       productos: newArray
     }
+    const dataOrder = {
+      id_usuario: getData('id'),
+      total: total
+    }
     const response = await addPurchase({data});
-    response && console.log('Venta realizada');
+    if(response.status === 201) {
+    const responseOrder =  await setOrder(dataOrder)
+    if(responseOrder.status === 201){
+      const dataMerge = {
+        id_venta: response.data.data.id_venta,
+        id_pedido: responseOrder.data.data.id
+      }
+      setMerge(dataMerge);
+    }
+  }
+  }
+
+  const completeMerge = async () => {
+    console.log(merge);    
+    const response = await mergePO(merge);
+    if(response.status === 200){
+      console.log('Venta realizada con exito');
+    }
   }
 
   React.useEffect(() => {
@@ -82,7 +104,6 @@ function Cart({products, remove, add}) {
                 <p className='text-50'>${total} </p>
                 <InputText onChange={(e)=> setPago(e.target.value)} keyfilter={'pnum'} className='flex justify-content-center w-5rem bg-bluegray-50 text-black-alpha-900 p-1 border-round-sm'/>
                 <p className='text-50'>${pago && total ? cambio : 0.00} </p>
-                <p className='text-black-alpha-900'>l</p>
               </div>
               <div>
               </div>

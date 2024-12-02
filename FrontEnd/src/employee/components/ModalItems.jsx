@@ -140,6 +140,7 @@ function ModalItems({ text, product, reload }) {
                                 { name: "Interiores" },
                                 { name: "Exteriores" },
                                 { name: "Especializada" },
+                                { name: "Cubeta de pintura" },
                             ]}
                             onChange={(e) => setCategory(e.value)}
                             placeholder="Seleccione una categoría"

@@ -3,8 +3,8 @@ import * as Connection from './use_connection'
 import CryptoJS from 'crypto-js';
 
 /* Alertas */
-const successMessage = ["Inicio de sesión correcto", "Registro correcto", "Producto agregado correctamente", "Producto eliminado correctamente", "Producto actualizado correctamente", "Compra realizada correctamente"];   
-const errorMessage = ["Usuario o contraseña incorrectos", "Error al registrar", "Error al agregar producto", "Error al eliminar producto", "Error al actualizar producto", "Error al realizar la compra"];
+const successMessage = ["Inicio de sesión correcto", "Registro correcto", "Producto agregado correctamente", "Producto eliminado correctamente", "Producto actualizado correctamente", "Compra realizada correctamente", "Pedido realizado correctamente", "Se relacionó correctamente el pedido con la compra"];   
+const errorMessage = ["Usuario o contraseña incorrectos", "Error al registrar", "Error al agregar producto", "Error al eliminar producto", "Error al actualizar producto", "Error al realizar la compra", "Error al realizar el pedido", "Error al relacionar el pedido con la compra"];
 
 export const getData = (option) => {
     const session = localStorage.getItem('session');
@@ -139,13 +139,14 @@ export const setProduct = async ({ data }) => {
     }
 }
 
-export const setOrder = async ({data}) => {
+export const setOrder = async (data) => {
     sendMessage('load',0);
     const response = await Connection.addOrder(data);
     if(response.status === 201) {
-        sendMessage(200, 0);
+        sendMessage(200, 6);
         return response
     } else {
+        sendMessage(400, 6);
         return null;
     }
 }
@@ -184,6 +185,19 @@ export const addPurchase = async ({data}) => {
         return response;
     } else {
         sendMessage(400, 5);
+        return null;
+    }
+}
+
+export const mergePO = (data) => {
+    sendMessage('load', 0);
+    const response = Connection.mergePurchaseOrder(data);
+    console.log(response);    
+    if (response.status === 201) {
+        sendMessage(200, 7);
+        return response;
+    } else {
+        sendMessage(400, 7);
         return null;
     }
 }

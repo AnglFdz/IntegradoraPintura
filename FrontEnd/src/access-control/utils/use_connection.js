@@ -103,3 +103,17 @@ export const setPurchase = async (data) => {
         return error;
     }
 }
+
+export const mergePurchaseOrder = async (data) => {
+    try {
+        const response = await ApiManager.put(`/ventas/${data.id_venta}/pedido/${data.id_pedido}`, {
+            headers: {
+                'Authorization': `Bearer ${getData('token')}`
+            }
+        });
+        return response;
+    }
+    catch (error) {
+        return error;
+    }
+}
