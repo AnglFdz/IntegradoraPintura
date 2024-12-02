@@ -16,8 +16,7 @@ function Cart({products, remove, add}) {
     let cantidad = 0;
     products.forEach((item) => {
       cantidad += item.cantidad;
-    });
-    console.log(cantidad);    
+    });   
     return cantidad;
   }
 
@@ -54,17 +53,9 @@ function Cart({products, remove, add}) {
         id_venta: response.data.data.id_venta,
         id_pedido: responseOrder.data.data.id
       }
-      setMerge(dataMerge);
+      await mergePO(dataMerge);
     }
   }
-  }
-
-  const completeMerge = async () => {
-    console.log(merge);    
-    const response = await mergePO(merge);
-    if(response.status === 200){
-      console.log('Venta realizada con exito');
-    }
   }
 
   React.useEffect(() => {

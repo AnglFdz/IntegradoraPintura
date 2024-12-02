@@ -90,7 +90,6 @@ export const addOrder = async (data) => {
 }
 
 export const setPurchase = async (data) => {
-        console.log(data);     
     try {   
         const response = await ApiManager.post('/ventas', data, {
             headers: {
@@ -106,7 +105,7 @@ export const setPurchase = async (data) => {
 
 export const mergePurchaseOrder = async (data) => {
     try {
-        const response = await ApiManager.put(`/ventas/${data.id_venta}/pedido/${data.id_pedido}`, {
+        const response = await ApiManager.put(`/ventas/${data.id_venta}/pedido/${data.id_pedido}`, {}, {
             headers: {
                 'Authorization': `Bearer ${getData('token')}`
             }
