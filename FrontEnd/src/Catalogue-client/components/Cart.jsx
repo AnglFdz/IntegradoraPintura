@@ -10,13 +10,11 @@ import { getData } from "../../access-control/utils/useMethods";
 const Cart = (props) => {
   const { items } = props;
   const [cartItems, setCartItems] = useState(items || []);
-  const [numIdentificador, setNumIdentificador] = useState(""); // Nuevo estado para el número identificador
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState(null);
   const [success, setSuccess] = useState(null);
 
   const id_usuario = getData("id");
-  const id_role = getData("role");
 
   useEffect(() => {
     if (items.length > 0) {
@@ -55,23 +53,15 @@ const Cart = (props) => {
     setError(null);
     setSuccess(null);
 
-    if (!id_usuario || !id_role) {
+    if (!id_usuario) {
       setError("No se pudo obtener la información del usuario.");
       setLoading(false);
       return;
     }
 
-    if (!numIdentificador.trim()) {
-      setError("Debe ingresar un número identificador válido para continuar.");
-      setLoading(false);
-      return;
-    }
-
     const data = {
-      numidentificador: numIdentificador.trim(),
       total: total,
       id_usuario: id_usuario,
-      id_role: id_role,
     };
 
     try {
@@ -81,6 +71,7 @@ const Cart = (props) => {
         console.log("Respuesta del servidor:", response);
       } else {
         setError("Hubo un error al enviar el pedido.");
+        console.log("Respuesta del servidor:", response);
       }
     } catch (error) {
       setError("Hubo un error al enviar el pedido.");
@@ -170,13 +161,6 @@ const Cart = (props) => {
           <h1 className="font-bold">Entrega</h1>
         </div>
         <div className="p-card mt-2 shadow-4 border-round surface-card p-4 flex flex-column align-items-center justify-content-center">
-          <h2 className="text-2xl font-bold text-secondary-700 mb-2">Número Identificador</h2>
-          <InputText
-            value={numIdentificador}
-            onChange={(e) => setNumIdentificador(e.target.value)}
-            placeholder="Ingrese el número identificador"
-            className="w-full mb-3"
-          />
           <div className="w-full">
             {/* Total y descuento */}
             <h2 className="text-2xl font-bold text-secondary-700 mb-2">Total de tu compra</h2>
@@ -197,7 +181,7 @@ const Cart = (props) => {
             icon="pi pi-check"
             className="w-full mt-3"
             onClick={handleCheckout}
-            disabled={loading || cartItems.length === 0 || !numIdentificador.trim()}
+            disabled={loading || cartItems.length === 0}
           />
           {error && <p style={{ color: 'red', marginTop: '1rem' }}>{error}</p>}
           {success && <p style={{ color: 'green', marginTop: '1rem' }}>{success}</p>}
