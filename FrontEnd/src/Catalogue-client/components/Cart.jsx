@@ -19,13 +19,16 @@ const Cart = (props) => {
   const id_role = getData("role");
 
   useEffect(() => {
-    if (!id_usuario || !id_role) {
-      setError("Error al obtener los datos del usuario.");
-    }
     if (items.length > 0) {
-      setCartItems(items.map(item => ({ ...item, cantidad: 1 })));
+      setCartItems(
+        items.map((item) => ({
+          ...item,
+          cantidad: item.cantidad || 1, // Asegura una cantidad mínima
+        }))
+      );
     }
-  }, [items, id_usuario, id_role]);
+  }, [items]);
+  
 
   // Actualizar cantidad de un producto
   const handleUpdateCantidad = (value, index) => {
@@ -65,7 +68,7 @@ const Cart = (props) => {
     }
 
     const data = {
-      numidentificador: numIdentificador.trim(), // Aseguramos que sea un string limpio
+      numidentificador: numIdentificador.trim(),
       total: total,
       id_usuario: id_usuario,
       id_role: id_role,
