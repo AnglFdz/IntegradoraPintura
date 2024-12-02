@@ -16,7 +16,7 @@ public class PedidoDto {
     private Integer id;
     private String numidentificador;
     private Double total;
-    private Integer id_usuario; // ID del usuario que realizó el pedido
-    private Integer id_role;   // ID del role del usuario
-    private Set<VentaDto> ventas; // Ventas asociadas al pedido
+    private Integer id_usuario;
+    private Integer id_role;
+    private Set<VentaDto> ventas;
 }
