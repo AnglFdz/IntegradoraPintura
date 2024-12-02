@@ -59,6 +59,13 @@ public class VentaService {
         ventaBean.setTotal(ventaDto.getTotal());
         ventaBean.setFechaVenta(ventaDto.getFechaVenta());
 
+        // Permitir crear la venta sin un pedido inicialmente
+        if (ventaDto.getId_pedido() != null) {
+            PedidoBean pedido = pedidoRepository.findById(ventaDto.getId_pedido())
+                    .orElseThrow(() -> new RuntimeException("Pedido con ID " + ventaDto.getId_pedido() + " no encontrado"));
+            ventaBean.setPedido(pedido);
+        }
+
         // Asociar usuario
         UsuarioBean usuario = usuarioRepository.findById(ventaDto.getId_usuario())
                 .orElseThrow(() -> new RuntimeException("Usuario con ID " + ventaDto.getId_usuario() + " no encontrado"));
@@ -72,15 +79,43 @@ public class VentaService {
         ventaBean.setProductos(productos);
 
         VentaBean savedVenta = ventaRepository.save(ventaBean);
+
         return VentaDto.builder()
                 .id_venta(savedVenta.getId_venta())
                 .cantidad(savedVenta.getCantidad())
                 .total(savedVenta.getTotal())
                 .fechaVenta(savedVenta.getFechaVenta())
                 .id_usuario(savedVenta.getUsuario().getId_usuario())
+                .id_pedido(savedVenta.getPedido() != null ? savedVenta.getPedido().getId() : null) // Puede ser null
                 .productos(ventaDto.getProductos())
                 .build();
     }
+
+    public VentaDto updateVentaWithPedido(Integer idVenta, Integer idPedido) {
+        VentaBean venta = ventaRepository.findById(idVenta)
+                .orElseThrow(() -> new RuntimeException("Venta con ID " + idVenta + " no encontrada"));
+
+        PedidoBean pedido = pedidoRepository.findById(idPedido)
+                .orElseThrow(() -> new RuntimeException("Pedido con ID " + idPedido + " no encontrado"));
+
+        venta.setPedido(pedido);
+        VentaBean updatedVenta = ventaRepository.save(venta);
+
+        return VentaDto.builder()
+                .id_venta(updatedVenta.getId_venta())
+                .cantidad(updatedVenta.getCantidad())
+                .total(updatedVenta.getTotal())
+                .fechaVenta(updatedVenta.getFechaVenta())
+                .id_usuario(updatedVenta.getUsuario().getId_usuario())
+                .id_pedido(updatedVenta.getPedido().getId())
+                .productos(updatedVenta.getProductos().stream()
+                        .map(ProductoBean::getId_producto)
+                        .collect(Collectors.toList()))
+                .build();
+    }
+
+
+
 
 
     private VentaDetalleDto toDetalleDTO(VentaBean venta) {
@@ -119,7 +154,13 @@ public class VentaService {
 
 
 
-
+    private PedidoBean validateAndGetPedido(Integer idPedido) {
+        if (idPedido == null) {
+            throw new RuntimeException("El ID del pedido es obligatorio para crear una venta");
+        }
+        return pedidoRepository.findById(idPedido)
+                .orElseThrow(() -> new RuntimeException("Pedido con ID " + idPedido + " no encontrado"));
+    }
 
 
 
