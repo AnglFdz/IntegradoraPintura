@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import Cart from './Cart';
 import ItemsList from './ItemsList';
+import { InputText } from 'primereact/inputtext';
 
 function ListProducts() {
     const styleHeader = 'bg-blue-600 text-bluegray-50 border-round-xl flex justify-content-center';
@@ -81,7 +82,15 @@ function ListProducts() {
 
             <div className="grid mt-2 h-full">
                 <div className="col-8">
-                    <ItemsList page='employee' products={obtenerProductosCarrito} />
+                  <div className='grid w-full p-3'>
+                    <div className="p-inputgroup flex-1 pr-2">
+                        <span className="p-inputgroup-addon">
+                            <i className="pi pi-search"></i>
+                        </span>
+                        <InputText placeholder="Buscar producto" onChange={(e) => setFilter(e.target.value)} />
+                    </div>
+                  </div>
+                    <ItemsList page='employee' products={obtenerProductosCarrito} filter={filter} />
                 </div>
                 <div className="col-4">
                     <Cart products={productosCarrito} remove={deleteProduct} add={obtenerProductosCarrito} />

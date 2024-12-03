@@ -62,7 +62,7 @@ function ItemsList({page, products, filter, addProduct}) {
     }
     return (
         <>
-            <DataTable value={productos} scrollable globalFilter={filter} scrollHeight="40rem" tableStyle={{ minWidth: '50rem' }}>
+            <DataTable value={productos} scrollable globalFilter={filter} scrollHeight="40rem" tableStyle={{ minWidth: '40rem' }}>
                 <Column field="id_producto" header="ID" ></Column>
                 <Column field="nombre" header="Nombre"></Column>
                 <Column field="precio" header="Precio"></Column>

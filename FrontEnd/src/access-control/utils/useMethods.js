@@ -200,3 +200,22 @@ export const mergePO = (data) => {
         return response;
     }
 }
+
+
+export const getOrders = async () => {
+    const response = await Connection.catchOrders();
+    if (response.status === 200) {
+        return response.data.data;
+    } else {
+        return null;
+    }
+}
+
+export const catchSales = async () => {
+    const response = await Connection.getSales();
+    if (response.status === 200) {
+        return response.data;
+    } else {
+        return null;
+    }
+}

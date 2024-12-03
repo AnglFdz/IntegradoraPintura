@@ -1,4 +1,3 @@
-import { InputNumber } from 'primereact/inputnumber'
 import { InputText } from 'primereact/inputtext'
 import { Button } from 'primereact/button'
 import React from 'react'
@@ -17,7 +16,7 @@ function ProductCard({ item, onRemove, onAdd }) {
         </div>
         <div className="grid">
           <Button icon='pi pi-caret-up' className='hover:bg-blue-800 p-2 ml-3 text-50 text-xl' onClick={() => onAdd(item)} />
-          <Button icon={item.cantidad === 1 ? 'pi pi-times' : 'pi pi-caret-down'} className='hover:bg-blue-800 p-2 ml-2 text-50 text-xl' onClick={() => onRemove(item.id_producto)} />
+          <Button icon={item.cantidad === 1 ? 'pi pi-times' : 'pi pi-caret-down'} className='hover:bg-blue-800 p-2 ml-2 mr-5 text-50 text-xl' onClick={() => onRemove(item.id_producto)} />
         </div>
       </div>
     </div>

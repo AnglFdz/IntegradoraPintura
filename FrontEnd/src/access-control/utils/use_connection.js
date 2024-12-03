@@ -116,3 +116,30 @@ export const mergePurchaseOrder = async (data) => {
         return error;
     }
 }
+
+export const catchOrders = async () => {
+    try {
+        const response = await ApiManager.get('/pedidos', {
+            headers: {
+                'Authorization': `Bearer ${getData('token')}`
+            }
+        });
+        return response;
+    }  catch (error) {
+        return error;
+    }
+
+}
+
+export const getSales = async () => {
+    try {
+        const response = await ApiManager.get('/ventas', {
+            headers: {
+                'Authorization': `Bearer ${getData('token')}`
+            }
+        });
+        return response;
+    } catch (error) {
+        return error;
+    }
+}

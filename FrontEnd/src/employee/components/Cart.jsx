@@ -4,6 +4,7 @@ import { Button } from 'primereact/button';
 import { VirtualScroller } from 'primereact/virtualscroller';
 import { InputText } from 'primereact/inputtext';
 import { addPurchase, getData, mergePO, setOrder } from '../../access-control/utils/useMethods';
+import Swal from 'sweetalert2';
 
 function Cart({products, remove, add}) {
   const [isMounted, setIsMounted] = React.useState(false);
@@ -54,6 +55,12 @@ function Cart({products, remove, add}) {
         id_pedido: responseOrder.data.data.id
       }
       await mergePO(dataMerge);
+      Swal.fire({
+        title: 'Venta realizada',
+        text: 'El identificador del pedido es: \n' + responseOrder.data.data.numidentificador +'\n digaselo al cliente',  
+        icon: 'success',
+        confirmButtonText: 'Aceptar'
+      });
     }
   }
   }
@@ -79,8 +86,8 @@ function Cart({products, remove, add}) {
     <>
       <div className="border-1 border-round-xl p-1 h-auto field">
         <div>
-          {products.length === 0 ? <p className='flex align-items-center justify-content-center text-2xl font-bold h-24rem'>No hay productos en el carrito</p> : 
-        <VirtualScroller items={products} itemSize={155} itemTemplate={itemTemplate} className="col-12 border-1 surface-border border-round" style={{ width: 'auto', height: '25rem' }}  /> }
+          {products.length === 0 ? <p className='flex align-items-center justify-content-center text-2xl font-bold h-26rem'>No hay productos en el carrito</p> : 
+        <VirtualScroller items={products} itemSize={155} itemTemplate={itemTemplate} className="col-12 border-1 surface-border border-round" style={{ width: 'auto', height: '29rem' }}  /> }
         </div>
         <div className='field flex justify-content-start align-items-center text-xl bg-gray-900 w-full border-round-xl mt-2'>
           <div className=' grid'>
@@ -95,6 +102,7 @@ function Cart({products, remove, add}) {
                 <p className='text-50'>${total} </p>
                 <InputText onChange={(e)=> setPago(e.target.value)} keyfilter={'pnum'} className='flex justify-content-center w-5rem bg-bluegray-50 text-black-alpha-900 p-1 border-round-sm'/>
                 <p className='text-50'>${pago && total ? cambio : 0.00} </p>
+                <p>L</p>
               </div>
               <div>
               </div>
