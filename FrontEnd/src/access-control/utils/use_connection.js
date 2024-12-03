@@ -12,10 +12,13 @@ export const sendLogin = async (data) => {
 }
 
 export const sendRegister = async (data) => {
-        console.log(data);
     try {
-        const response = await ApiManager.post(`/usuarios/crear/${data.type}`, data.user);
-        
+        const response = data.type = 'USER_ROLE' ? await ApiManager.post(`/usuarios/crear/USER_ROLE`, data.user) :
+            await ApiManager.post(`/usuarios/crear/EMPLOYEE_ROLE`, data.user, {
+                headers: {
+                    'Authorization': `Bearer ${getData('token')}`
+                }
+            });        
         return response;
     } catch (error) {
         return error;

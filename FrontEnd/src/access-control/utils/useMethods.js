@@ -117,7 +117,7 @@ export const register = async ({ data, navigate }) => {
     const response = await Connection.sendRegister(send);
     if (response.status === 201) {
         sendMessage(200, 1);
-        navigate('/');
+        data.type === 'USER_ROLE' ? navigate('/') : null
     } else {
         sendMessage(400, 1);
     }
