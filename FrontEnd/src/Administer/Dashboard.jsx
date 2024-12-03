@@ -5,11 +5,10 @@ import Swal from 'sweetalert2';
 import { register, obtUsers } from '../access-control/utils/useMethods';
 import { useNavigate } from 'react-router-dom';
 import { sendRegister } from '../access-control/utils/use_connection';
-
+import { Link } from 'react-router-dom';
+import Homepage from './../Catalogue-client/homepage';
 const Dashboard = () => {
-  const [employees, setEmployees] = useState([
-    { id: 1, nombre: 'Victor Alejandro Oliva Quiroz', telefono: '777 568 1233', correo: 'victoralejandro353@hotmail.com' }
-  ]);
+    const [employees, setEmployees] = useState([]);
   const [showModal, setShowModal] = useState(false);
   const [editingEmployee, setEditingEmployee] = useState(null);
   const [newEmployee, setNewEmployee] = useState({ nombre: '', telefono: '', correo: '', contrasena: '' });
@@ -95,20 +94,26 @@ const Dashboard = () => {
           <div style={{ width: '30px', height: '30px', backgroundColor: '#333', borderRadius: '50%' }}></div>
           <ul style={{ display: 'flex', listStyle: 'none', margin: '0 0 0 20px', padding: '0' }}>
             <li style={{ margin: '0 15px', cursor: 'pointer' }}>
-              <i className="pi pi-home" style={{ marginRight: '8px' }}></i> Inicio
+            <Link to="/dashboard" style={{ textDecoration: 'none', color: 'inherit' }}>
+          <i className="pi pi-home" style={{ marginRight: '8px' }}></i> Inicio
+        </Link>
             </li>
             <li style={{ margin: '0 15px', cursor: 'pointer' }}>
-              <i className="pi pi-shopping-bag" style={{ marginRight: '8px' }}></i>Productos
-            </li>
+        <Link to="/catalogue" style={{ textDecoration: 'none', color: 'inherit' }}>
+          <i className="pi pi-shopping-bag" style={{ marginRight: '8px' }}></i> Productos
+        </Link>
+      </li>
             <li style={{ margin: '0 15px', cursor: 'pointer' }}>
-              <i className="pi pi-box" style={{ marginRight: '8px' }}></i>Pedidos
-            </li>
-            <li style={{ margin: '0 15px', cursor: 'pointer' }}>
-              <i className="pi pi-chart-line" style={{ marginRight: '8px' }}></i>Ventas
-            </li>
-            <li style={{ margin: '0 15px', cursor: 'pointer' }}>
-              <i className="pi pi-users" style={{ marginRight: '8px' }}></i> Empleados
-            </li>
+        <Link to="/employee/orders" style={{ textDecoration: 'none', color: 'inherit' }}>
+          <i className="pi pi-box" style={{ marginRight: '8px' }}></i> Pedidos
+        </Link>
+      </li>
+      <li style={{ margin: '0 15px', cursor: 'pointer' }}>
+        <Link to="/employee/saleList" style={{ textDecoration: 'none', color: 'inherit' }}>
+          <i className="pi pi-chart-line" style={{ marginRight: '8px' }}></i> Ventas
+        </Link>
+      </li>
+
           </ul>
         </div>
       </nav>
