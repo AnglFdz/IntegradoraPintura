@@ -113,7 +113,7 @@ public class ProductoController {
     public ResponseEntity<ApiResponse> deleteProducto(@PathVariable Integer id) {
         Optional<ProductoDto> existingProducto = productoService.getProductoById(id);
         if (existingProducto.isPresent()) {
-            productoService.deleteProducto(id);
+            productoService.eliminarProducto(id);
             return ResponseEntity.status(HttpStatus.OK)
                     .body(new ApiResponse(HttpStatus.OK, false, "Producto eliminado exitosamente"));
         } else {
