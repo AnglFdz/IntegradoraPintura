@@ -12,8 +12,10 @@ export const sendLogin = async (data) => {
 }
 
 export const sendRegister = async (data) => {
+        console.log(data);
     try {
         const response = await ApiManager.post(`/usuarios/crear/${data.type}`, data.user);
+        
         return response;
     } catch (error) {
         return error;

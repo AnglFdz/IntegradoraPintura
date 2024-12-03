@@ -29,6 +29,7 @@ public class MainSecurity {
     private static final String[] WHITE_LIST = {
             "/api/auth/**",
             "/api/usuarios/crear/USER_ROLE",
+            "/api/usuarios/crear/EMPLOYEE_ROLE",
     };
 
     private final UserDetailsServiceImpl service;

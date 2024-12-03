@@ -4,6 +4,7 @@ import "primeicons/primeicons.css";
 import Swal from 'sweetalert2';
 import { register, obtUsers } from '../access-control/utils/useMethods';
 import { useNavigate } from 'react-router-dom';
+import { sendRegister } from '../access-control/utils/use_connection';
 
 const Dashboard = () => {
   const [employees, setEmployees] = useState([
@@ -17,18 +18,20 @@ const Dashboard = () => {
 
   const getUsers = async () => {
     const users = await obtUsers();
-    console.log(users)
+    if (users) {
+      setEmployees(users);
+    }
   }
 
   const SendRegister = async () => {
     const data = {
-      name: newEmployee.nombre,
-      lastName: '',
-      secondLastName: '',
-      email: newEmployee.correo,
-      password: newEmployee.contrasena
+      name: "prueba",
+      lastName: 'prueba',
+      secondLastName: 'dos',
+      email: "mklmlk",
+      password: "123456",
+      type: 'EMPLOYEE_ROLE'
     }
-    sendMessage('load', 0)
     await register({ data, navigate })
 
   }
@@ -81,6 +84,7 @@ const Dashboard = () => {
 
   useEffect(() => {
     getUsers();
+    SendRegister();
   }, []);
 
   return (
@@ -130,9 +134,10 @@ const Dashboard = () => {
               setEditingEmployee(null);
               setNewEmployee({ nombre: '', telefono: '', correo: '', contrasena: '' });
               setShowModal(true);
+              sendRegister();
             }}
             style={{
-              backgroundColor: '#007BFF',
+              backgroundColor: '#00000',
               color: 'white',
               border: 'none',
               borderRadius: '5px',
