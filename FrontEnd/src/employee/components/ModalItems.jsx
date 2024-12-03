@@ -20,9 +20,6 @@ function ModalItems({ text, product, reload }) {
     const [category, setCategory] = useState(product ? product.categoria : "");
 
 
-    React.useEffect(() => {     
-    }, [reload, image]);
-
     const tratamentImage = (file) => {
         const reader = new FileReader();
         reader.readAsDataURL(file);
@@ -61,6 +58,21 @@ function ModalItems({ text, product, reload }) {
         reload();
     };
 
+    const validForm = () => {
+        if (name === "" || description === "" || price === "" || stock === "" || image === "" || category === "") {
+            return true;
+        } else {
+            return false;
+        }
+    }
+
+    React.useEffect(() => {
+        validForm();
+    }, [name, description, price, stock, image, category]);
+
+    React.useEffect(() => {     
+    }, [reload, image]);
+
     const styleInputsTexts = "w-full";
 
     return (
@@ -91,6 +103,7 @@ function ModalItems({ text, product, reload }) {
                     <div className="col-6">
                         <h3>Nombre</h3>
                         <InputText
+                        keyfilter={"alpha"}
                             placeholder="Ingrese el nombre del producto"
                             className={styleInputsTexts}
                             value={name}
@@ -98,6 +111,7 @@ function ModalItems({ text, product, reload }) {
                         />
                         <h3>Descripción</h3>
                         <InputTextarea
+                            keyfilter={"alphanum"}
                             placeholder="Ingrese la descripción del producto"
                             className={styleInputsTexts}
                             value={description}
@@ -107,7 +121,7 @@ function ModalItems({ text, product, reload }) {
                     <div className="col-6">
                         <h3>Precio</h3>
                         <InputText
-                            keyfilter={"num"}
+                            keyfilter={"money"}
                             placeholder="Ingrese el precio del producto"
                             className={styleInputsTexts}
                             value={price}
@@ -115,7 +129,7 @@ function ModalItems({ text, product, reload }) {
                         />
                         <h3>Stock</h3>
                         <InputText
-                            keyfilter={"num"}
+                            keyfilter={"pint"}
                             placeholder="Ingrese el stock del producto"
                             className={styleInputsTexts}
                             value={stock}
@@ -143,19 +157,20 @@ function ModalItems({ text, product, reload }) {
                                 { name: "Cubeta de pintura" },
                             ]}
                             onChange={(e) => setCategory(e.value)}
-                            placeholder="Seleccione una categoría"
+                            placeholder= {category ? category : "Seleccione una categoría"}
                             className={styleInputsTexts}
                         />
                     </div>
                     <div className="grid flex justify-content-end w-full mt-4">
                         <Button
                             label="Cancelar"
-                            className="p-button-danger"
+                            className="p-button-danger mr-5"
                             onClick={() => setVisible(false)}
                         />
                         <Button
                             label="Guardar"
                             className="p-button-success"
+                            disabled={validForm()}
                             onClick={() => (!showText ? updateInfo() : saveProduct())}
                         />
                     </div>

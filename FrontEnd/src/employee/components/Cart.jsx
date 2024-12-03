@@ -96,11 +96,11 @@ function Cart({products, remove, add}) {
                 <p>Total:</p>
                 <p>Pago:</p>
                 <p style={{marginTop: '30px'}}>Cambio:</p>
-                <Button label='Realizar compra' className='bg-bluegray-50 text-blue-500' onClick={()=>setVenta()} disabled={pago <= total}/>
+                <Button label='Realizar compra' className='bg-bluegray-50 text-blue-500' onClick={()=>setVenta()} disabled={!(pago >= total)}/>
               </div>
               <div>
                 <p className='text-50'>${total} </p>
-                <InputText onChange={(e)=> setPago(e.target.value)} keyfilter={'pnum'} className='flex justify-content-center w-5rem bg-bluegray-50 text-black-alpha-900 p-1 border-round-sm'/>
+                <InputText min={1} onChange={(e)=> setPago(e.target.value)} keyfilter={'money'} className='flex justify-content-center w-5rem bg-bluegray-50 text-black-alpha-900 p-1 border-round-sm'/>
                 <p className='text-50'>${pago && total ? cambio : 0.00} </p>
                 <p>L</p>
               </div>
