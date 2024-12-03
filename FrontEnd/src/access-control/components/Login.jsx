@@ -50,6 +50,7 @@ function Login({reload}) {
                             {!validEmail ? null : <span className='text-sm text-red-400'>Correo electronico con formato invalido</span>}
                             <span className='col-12 mt-2'>Contraseña:</span>
                             <Password keyfilter='alphanum' className='col-12' onChange={(e) => setPassword(e.target.value)} toggleMask feedback={false}/>
+                            {password ? null : <span className='text-sm text-red-400'>Campo requerido</span>}
                             <a href="/recovery" className={`${styleLink}`}>¿Olvidaste tu contraseña?</a>
                             <Button className='mt-3' label='Iniciar sesión' disabled={validForm}/>
                             <p>¿No tienes cuenta? <a href="/register" className={`${styleLink}`}>Create una</a></p>

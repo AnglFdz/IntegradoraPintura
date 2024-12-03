@@ -13,7 +13,7 @@ export const sendLogin = async (data) => {
 
 export const sendRegister = async (data) => {
     try {
-        const response = await ApiManager.post('/usuarios/crear/USER_ROLE', data);
+        const response = await ApiManager.post(`/usuarios/crear/${data.type}`, data.user);
         return response;
     } catch (error) {
         return error;
@@ -140,6 +140,20 @@ export const getSales = async () => {
         });
         return response;
     } catch (error) {
+        return error;
+    }
+}
+
+export const catchUsers = async () => {
+    try {
+        const response = await ApiManager.get('/usuarios', {
+            headers: {
+                'Authorization': `Bearer ${getData('token')}`
+            }
+        });
+        return response;
+    }
+    catch (error) {
         return error;
     }
 }

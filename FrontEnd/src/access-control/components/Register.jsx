@@ -34,6 +34,7 @@ function Register() {
             secondLastName,
             email,
             password: password === confirmPassword ? password : null,
+            type: 'USER_ROLE'
         }
         if(!Object.entries(newUser).some(([key, value]) => !value)){
             setUser(newUser)

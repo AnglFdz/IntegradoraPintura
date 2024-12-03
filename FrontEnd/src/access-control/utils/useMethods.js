@@ -109,7 +109,12 @@ export const register = async ({ data, navigate }) => {
         email: data.email,
         contrasena: data.password
     }
-    const response = await Connection.sendRegister(user);
+    const type = data.type;
+    const send = {
+        user: user,
+        type: type
+    }
+    const response = await Connection.sendRegister(send);
     if (response.status === 201) {
         sendMessage(200, 1);
         navigate('/');
@@ -215,6 +220,15 @@ export const catchSales = async () => {
     const response = await Connection.getSales();
     if (response.status === 200) {
         return response.data;
+    } else {
+        return null;
+    }
+}
+
+export const obtUsers = async () => {
+    const response = await Connection.catchUsers();
+    if (response.status === 200) {
+        return response.data.data;
     } else {
         return null;
     }
